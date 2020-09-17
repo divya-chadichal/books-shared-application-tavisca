@@ -927,7 +927,7 @@
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<div class=\"formPane\">\r\n  <div class=\"formContent\">\r\n    <div class=\"formDiv\">\r\n      <h2 class=\"formHeader\">Add Book Details</h2>\r\n      <form #bookForm=\"ngForm\">\r\n        <div class=\"form-group\">\r\n          <p for=\"title\">Title</p>\r\n          <input\r\n            type=\"text\"\r\n            id=\"title\"\r\n            name=\"title\"\r\n            required\r\n            [(ngModel)]=\"book.title\"/>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <p for=\"author\">Author</p>\r\n          <input\r\n            type=\"text\"\r\n            id=\"author\"\r\n            name=\"author\"\r\n            required\r\n            [(ngModel)]=\"book.author\"/>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <p for=\"side\">Description</p>\r\n          <input\r\n            type=\"text\"\r\n            id=\"description\"\r\n            name=\"description\"\r\n            required\r\n            [(ngModel)]=\"book.description\"/>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <p for=\"published\">Published</p>\r\n          <input\r\n            type=\"text\"\r\n            id=\"published\"\r\n            name=\"published\"\r\n            required\r\n            [(ngModel)]=\"book.published\"/>\r\n        </div>\r\n        <br>\r\n        <button \r\n            [disabled]=\"bookForm.invalid\"\r\n            *ngIf=\"showAdd\"\r\n            class=\"btn buttonPrimary\" \r\n            type=\"button\"\r\n            (click)=\"onSubmit(bookForm, 'add')\">Add\r\n        </button> &nbsp;\r\n        <button\r\n            [disabled]=\"bookForm.invalid\"\r\n            *ngIf=\"!showAdd\"\r\n            class=\"btn buttonPrimary\"\r\n            type=\"button\"\r\n            (click)=\"onSubmit(bookForm, 'edit')\">Update\r\n        </button>&nbsp;\r\n        <button class=\"btn buttonDanger\" routerLink=\"/home\">Cancel</button>\r\n      </form>\r\n      </div>\r\n    </div>\r\n  </div>"
+            "templateData": "<div class=\"formPane\">\r\n  <div class=\"formContent\">\r\n    <div class=\"formDiv\">\r\n      <h2 *ngIf=\"showAdd\" class=\"formHeader\">Add Book Details</h2>\r\n      <h2 *ngIf=\"!showAdd\" class=\"formHeader\">Edit Book Details</h2>\r\n      <form #bookForm=\"ngForm\">\r\n        <div class=\"form-group\">\r\n          <p for=\"title\">Title</p>\r\n          <input\r\n            type=\"text\"\r\n            id=\"title\"\r\n            name=\"title\"\r\n            required\r\n            [(ngModel)]=\"book.title\"/>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <p for=\"author\">Author</p>\r\n          <input\r\n            type=\"text\"\r\n            id=\"author\"\r\n            name=\"author\"\r\n            required\r\n            [(ngModel)]=\"book.author\"/>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <p for=\"side\">Description</p>\r\n          <input\r\n            type=\"text\"\r\n            id=\"description\"\r\n            name=\"description\"\r\n            required\r\n            [(ngModel)]=\"book.description\"/>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <p for=\"published\">Published</p>\r\n          <input\r\n            type=\"text\"\r\n            id=\"published\"\r\n            name=\"published\"\r\n            required\r\n            [(ngModel)]=\"book.published\"/>\r\n        </div>\r\n        <br>\r\n        <button \r\n            [disabled]=\"bookForm.invalid\"\r\n            *ngIf=\"showAdd\"\r\n            class=\"btn buttonPrimary\" \r\n            type=\"button\"\r\n            (click)=\"onSubmit(bookForm, 'add')\">Add\r\n        </button> &nbsp;\r\n        <button\r\n            [disabled]=\"bookForm.invalid\"\r\n            *ngIf=\"!showAdd\"\r\n            class=\"btn buttonPrimary\"\r\n            type=\"button\"\r\n            (click)=\"onSubmit(bookForm, 'edit')\">Update\r\n        </button>&nbsp;\r\n        <button class=\"btn buttonDanger\" routerLink=\"/home\">Cancel</button>\r\n      </form>\r\n      </div>\r\n    </div>\r\n  </div>"
         },
         {
             "name": "AppComponent",
@@ -1900,7 +1900,7 @@
                 "name": "Default",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/stories/books.stories.ts",
+                "file": "src/stories/app.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
             },
@@ -1908,7 +1908,7 @@
                 "name": "Default",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/stories/app.stories.ts",
+                "file": "src/stories/books.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
             },
@@ -2004,17 +2004,17 @@
                 "name": "initialState",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/register/store/reducers/register-reducer.ts",
-                "type": "RegisterState",
-                "defaultValue": "{\r\n  isRegistered: false,\r\n  user: null,\r\n  token : null,\r\n  message : null\r\n}"
+                "file": "src/app/login/store/reducers/login-reducer.ts",
+                "type": "AuthState",
+                "defaultValue": "{\r\n  isAuthenticated : false,\r\n  loginToken : null,\r\n  message : null,\r\n}"
             },
             {
                 "name": "initialState",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/login/store/reducers/login-reducer.ts",
-                "type": "AuthState",
-                "defaultValue": "{\r\n  isAuthenticated : false,\r\n  loginToken : null,\r\n  message : null,\r\n}"
+                "file": "src/app/register/store/reducers/register-reducer.ts",
+                "type": "RegisterState",
+                "defaultValue": "{\r\n  isRegistered: false,\r\n  user: null,\r\n  token : null,\r\n  message : null\r\n}"
             },
             {
                 "name": "lightTheme",
@@ -2180,6 +2180,14 @@
                 "name": "Template",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
+                "file": "src/stories/app.stories.ts",
+                "type": "Story<AppComponent>",
+                "defaultValue": "(args: AppComponent) => ({\r\n    component: AppComponent,\r\n    templateUrl: '../app/app.component.html',\r\n    styleUrls: ['../app/app.component.scss'],\r\n    moduleMetadata: {\r\n        declarations: [\r\n            AppComponent,\r\n            HeaderComponent\r\n        ],\r\n        imports: [\r\n            CommonModule,\r\n            BrowserModule,\r\n            AppRoutingModule,\r\n            FormsModule,\r\n            ReactiveFormsModule,\r\n            HttpClientModule,\r\n            RouterModule.forRoot([], { useHash: true }),\r\n            StoreModule.forRoot({user: userReducer, register: registerReducer}),\r\n            EffectsModule.forRoot([UserEffects, RegisterEffects]),\r\n            BrowserAnimationsModule\r\n        ],\r\n        providers: [\r\n            { provide: APP_BASE_HREF, useValue: '/' },\r\n            ThemeService\r\n        ],\r\n        schemas: [CUSTOM_ELEMENTS_SCHEMA],\r\n    },\r\n    props: { args },\r\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
                 "file": "src/stories/addeditbook.stories.ts",
                 "type": "Story<AddEditBookComponent>",
                 "defaultValue": "(args: AddEditBookComponent) => ({\r\n    component: AddEditBookComponent,\r\n    moduleMetadata: {\r\n        declarations: [AddEditBookComponent],\r\n        imports: [\r\n          CommonModule,\r\n          HttpClientModule,\r\n          FormsModule,\r\n          ReactiveFormsModule,\r\n          RouterTestingModule,\r\n          StoreModule.forRoot({}),\r\n          EffectsModule.forRoot([])\r\n        ],\r\n        providers: [BooksService],\r\n        schemas: [CUSTOM_ELEMENTS_SCHEMA]\r\n    },\r\n    props: args\r\n})"
@@ -2191,14 +2199,6 @@
                 "file": "src/stories/books.stories.ts",
                 "type": "Story<BooksComponent>",
                 "defaultValue": "(args: BooksComponent) => ({\r\n    component: BooksComponent,\r\n    templateUrl: '../app/books/books.component.html',\r\n    styleUrls: ['../app/books/books.component.scss'],\r\n    moduleMetadata: {\r\n        declarations: [BooksComponent, AddEditBookComponent],\r\n        imports: [\r\n          CommonModule,\r\n          HttpClientModule,\r\n          FormsModule,\r\n          ReactiveFormsModule,\r\n          RouterTestingModule\r\n        ],\r\n        providers: [BooksService],\r\n        schemas: [CUSTOM_ELEMENTS_SCHEMA]\r\n    },\r\n    props: { args, books$: booksList },\r\n})"
-            },
-            {
-                "name": "Template",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/stories/app.stories.ts",
-                "type": "Story<AppComponent>",
-                "defaultValue": "(args: AppComponent) => ({\r\n    component: AppComponent,\r\n    templateUrl: '../app/app.component.html',\r\n    styleUrls: ['../app/app.component.scss'],\r\n    moduleMetadata: {\r\n        declarations: [\r\n            AppComponent,\r\n            HeaderComponent\r\n        ],\r\n        imports: [\r\n            CommonModule,\r\n            BrowserModule,\r\n            AppRoutingModule,\r\n            FormsModule,\r\n            ReactiveFormsModule,\r\n            HttpClientModule,\r\n            RouterModule.forRoot([], { useHash: true }),\r\n            StoreModule.forRoot({user: userReducer, register: registerReducer}),\r\n            EffectsModule.forRoot([UserEffects, RegisterEffects]),\r\n            BrowserAnimationsModule\r\n        ],\r\n        providers: [\r\n            { provide: APP_BASE_HREF, useValue: '/' },\r\n            ThemeService\r\n        ],\r\n        schemas: [CUSTOM_ELEMENTS_SCHEMA],\r\n    },\r\n    props: { args },\r\n})"
             },
             {
                 "name": "Template",
@@ -2642,24 +2642,6 @@
                     "defaultValue": "createSelector(getRegisterReferenceState, state => state)"
                 }
             ],
-            "src/app/register/store/reducers/register-reducer.ts": [
-                {
-                    "name": "initialState",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/register/store/reducers/register-reducer.ts",
-                    "type": "RegisterState",
-                    "defaultValue": "{\r\n  isRegistered: false,\r\n  user: null,\r\n  token : null,\r\n  message : null\r\n}"
-                },
-                {
-                    "name": "registerReducer",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/register/store/reducers/register-reducer.ts",
-                    "type": "",
-                    "defaultValue": "createReducer(\r\n    initialState,\r\n    // Register reducer\r\n    on(RegisterActions.register, (state, action) => {\r\n            return {\r\n            ...state,\r\n            isRegistered : false,\r\n            user : action.user,\r\n            token : null,\r\n            message : null\r\n        };\r\n    }),\r\n\r\n    // RegisterSuccess reducer\r\n    on(RegisterActions.registerSuccess, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isRegistered : true,\r\n            user : null,\r\n            token : action.accessToken.accessToken,\r\n            message : null,\r\n        };\r\n    }),\r\n\r\n    // RegisterFailuer reducer\r\n    on(RegisterActions.registerFailure, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isRegistered : false,\r\n            user : null,\r\n            token : null,\r\n            message : action.error,\r\n        };\r\n    })\r\n)"
-                }
-            ],
             "src/app/login/store/reducers/login-reducer.ts": [
                 {
                     "name": "initialState",
@@ -2676,6 +2658,24 @@
                     "file": "src/app/login/store/reducers/login-reducer.ts",
                     "type": "",
                     "defaultValue": "createReducer(\r\n    initialState,\r\n    // Login Reducer\r\n    on(LoginActions.login, (state, action) => {\r\n            return {\r\n            ...state,\r\n            isAuthenticated : false,\r\n            loginToken : null,\r\n            message: null\r\n        };\r\n    }),\r\n\r\n    // LoginSuccess Reducer\r\n    on(LoginActions.loginSuccess, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isAuthenticated : true,\r\n            loginToken : action.accessToken.accessToken,\r\n            message : null\r\n        };\r\n    }),\r\n\r\n    // LoginFailure reducer\r\n    on(LoginActions.loginFailure, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isAuthenticated : false,\r\n            loginToken : null,\r\n            message : action.error,\r\n        };\r\n    }),\r\n\r\n)"
+                }
+            ],
+            "src/app/register/store/reducers/register-reducer.ts": [
+                {
+                    "name": "initialState",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/register/store/reducers/register-reducer.ts",
+                    "type": "RegisterState",
+                    "defaultValue": "{\r\n  isRegistered: false,\r\n  user: null,\r\n  token : null,\r\n  message : null\r\n}"
+                },
+                {
+                    "name": "registerReducer",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/register/store/reducers/register-reducer.ts",
+                    "type": "",
+                    "defaultValue": "createReducer(\r\n    initialState,\r\n    // Register reducer\r\n    on(RegisterActions.register, (state, action) => {\r\n            return {\r\n            ...state,\r\n            isRegistered : false,\r\n            user : action.user,\r\n            token : null,\r\n            message : null\r\n        };\r\n    }),\r\n\r\n    // RegisterSuccess reducer\r\n    on(RegisterActions.registerSuccess, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isRegistered : true,\r\n            user : null,\r\n            token : action.accessToken.accessToken,\r\n            message : null,\r\n        };\r\n    }),\r\n\r\n    // RegisterFailuer reducer\r\n    on(RegisterActions.registerFailure, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isRegistered : false,\r\n            user : null,\r\n            token : null,\r\n            message : action.error,\r\n        };\r\n    })\r\n)"
                 }
             ],
             "src/stories/login.stories.ts": [
