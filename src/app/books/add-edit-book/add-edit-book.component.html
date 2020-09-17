@@ -1,7 +1,8 @@
 <div class="formPane">
   <div class="formContent">
     <div class="formDiv">
-      <h2 class="formHeader">Add Book Details</h2>
+      <h2 *ngIf="showAdd" class="formHeader">Add Book Details</h2>
+      <h2 *ngIf="!showAdd" class="formHeader">Edit Book Details</h2>
       <form #bookForm="ngForm">
         <div class="form-group">
           <p for="title">Title</p>

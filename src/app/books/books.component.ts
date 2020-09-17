@@ -13,15 +13,19 @@ import { authSelector } from '../login/store/selectors/login-selector';
 })
 
 export class BooksComponent implements OnInit {
-  books$: Observable<Book[]>;
+  books$: any;
   isLoggedIn: boolean;
 
   constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.store.dispatch(bookActionTypes.loadBooks()); // dispatch load books actions
-    this.books$ = this.store.select(getAllBooksList); // get all books list
-    this.store.select(authSelector).subscribe(state => this.isLoggedIn = state.isAuthenticated); // set isLoggedIn to true if logged in
+    this.store.select(getAllBooksList).subscribe(result =>  this.books$ = result); // get all books list
+    this.store.select(authSelector).subscribe(state => {
+      if (state) {
+        this.isLoggedIn = state.isAuthenticated;
+      }
+    }); // set isLoggedIn to true if logged in
   }
 
   // Delete Book function

@@ -1,0 +1,3616 @@
+{
+    "pipes": [],
+    "interfaces": [
+        {
+            "name": "AuthState",
+            "id": "interface-AuthState-c83d0036546545f906eee504c8b59cbc",
+            "file": "src/app/login/store/reducers/login-reducer.ts",
+            "type": "interface",
+            "sourceCode": "import { createReducer, on } from '@ngrx/store';\r\nimport * as LoginActions from '../actions/login-actions';\r\n\r\nexport interface AuthState {\r\n  isAuthenticated: boolean;\r\n  loginToken: null;\r\n  message: string | null;\r\n}\r\n\r\n// set initial state\r\nexport const initialState: AuthState = {\r\n  isAuthenticated : false,\r\n  loginToken : null,\r\n  message : null,\r\n};\r\n\r\nexport const userReducer = createReducer(\r\n    initialState,\r\n    // Login Reducer\r\n    on(LoginActions.login, (state, action) => {\r\n            return {\r\n            ...state,\r\n            isAuthenticated : false,\r\n            loginToken : null,\r\n            message: null\r\n        };\r\n    }),\r\n\r\n    // LoginSuccess Reducer\r\n    on(LoginActions.loginSuccess, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isAuthenticated : true,\r\n            loginToken : action.accessToken.accessToken,\r\n            message : null\r\n        };\r\n    }),\r\n\r\n    // LoginFailure reducer\r\n    on(LoginActions.loginFailure, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isAuthenticated : false,\r\n            loginToken : null,\r\n            message : action.error,\r\n        };\r\n    }),\r\n\r\n);\r\n\r\n",
+            "properties": [
+                {
+                    "name": "isAuthenticated",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 5
+                },
+                {
+                    "name": "loginToken",
+                    "type": "null",
+                    "optional": false,
+                    "description": "",
+                    "line": 6
+                },
+                {
+                    "name": "message",
+                    "type": "string | null",
+                    "optional": false,
+                    "description": "",
+                    "line": 7
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 150,
+            "methods": []
+        },
+        {
+            "name": "BookState",
+            "id": "interface-BookState-790aee36d29ecf3b981cd767c7e2d649",
+            "file": "src/app/books/store/reducers/books-reducer.ts",
+            "type": "interface",
+            "sourceCode": "import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';\r\nimport { createReducer, on } from '@ngrx/store';\r\nimport { Book } from '../../../models/book';\r\nimport { bookActionTypes } from '../actions/books-actions';\r\n\r\nexport interface BookState extends EntityState<Book> {\r\n  booksLoaded: boolean;\r\n  selectedBookId: number;\r\n}\r\n\r\nexport const adapter: EntityAdapter<Book> = createEntityAdapter<Book>();\r\n\r\n// set book inital state\r\nexport const initialState = adapter.getInitialState({\r\n  booksLoaded: false,\r\n  selectedBookId: null\r\n});\r\n\r\nexport const bookReducer = createReducer(\r\n  initialState,\r\n\r\n  // books loaded reducer\r\n  on(bookActionTypes.booksLoaded, (state, action) => {\r\n    return adapter.setAll(\r\n      action.books,\r\n      {...state, booksLoaded: true}\r\n    );\r\n  }),\r\n\r\n  // book loaded reducer\r\n  on(bookActionTypes.bookLoaded, (state, action) => {\r\n    return adapter.setAll(\r\n      action.book,\r\n      {...state, bookLoaded: true}\r\n    );\r\n  }),\r\n\r\n  // add book reducer\r\n  on(bookActionTypes.addBook, (state, action) => {\r\n    return adapter.addOne(action.book, state);\r\n  }),\r\n\r\n  // delete book reducer\r\n  on(bookActionTypes.deleteBook, (state, action) => {\r\n    return adapter.removeOne(action.bookId, state);\r\n  }),\r\n\r\n  // update book reducer\r\n  on(bookActionTypes.updateBook, (state, action) => {\r\n    return adapter.updateOne(action.update, state);\r\n  })\r\n);\r\n\r\nexport const { selectAll, selectEntities } = adapter.getSelectors();\r\n",
+            "properties": [
+                {
+                    "name": "booksLoaded",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 7
+                },
+                {
+                    "name": "selectedBookId",
+                    "type": "number",
+                    "optional": false,
+                    "description": "",
+                    "line": 8
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 150,
+            "methods": [],
+            "extends": "EntityState"
+        },
+        {
+            "name": "RegisterState",
+            "id": "interface-RegisterState-b7d3720b1ca33e9f4872b3142986c25c",
+            "file": "src/app/register/store/reducers/register-reducer.ts",
+            "type": "interface",
+            "sourceCode": "import { createReducer, on } from '@ngrx/store';\r\nimport { RegisterUser } from '../../../models/register-user';\r\nimport * as RegisterActions from '../actions/register-actions';\r\n\r\nexport interface RegisterState {\r\n  isRegistered: boolean;\r\n  user: RegisterUser | null;\r\n  token: string | null;\r\n  message: string | null;\r\n}\r\n\r\n// set initial register state\r\nexport const initialState: RegisterState = {\r\n  isRegistered: false,\r\n  user: null,\r\n  token : null,\r\n  message : null\r\n};\r\n\r\nexport const registerReducer = createReducer(\r\n    initialState,\r\n    // Register reducer\r\n    on(RegisterActions.register, (state, action) => {\r\n            return {\r\n            ...state,\r\n            isRegistered : false,\r\n            user : action.user,\r\n            token : null,\r\n            message : null\r\n        };\r\n    }),\r\n\r\n    // RegisterSuccess reducer\r\n    on(RegisterActions.registerSuccess, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isRegistered : true,\r\n            user : null,\r\n            token : action.accessToken.accessToken,\r\n            message : null,\r\n        };\r\n    }),\r\n\r\n    // RegisterFailuer reducer\r\n    on(RegisterActions.registerFailure, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isRegistered : false,\r\n            user : null,\r\n            token : null,\r\n            message : action.error,\r\n        };\r\n    })\r\n);\r\n",
+            "properties": [
+                {
+                    "name": "isRegistered",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 6
+                },
+                {
+                    "name": "message",
+                    "type": "string | null",
+                    "optional": false,
+                    "description": "",
+                    "line": 9
+                },
+                {
+                    "name": "token",
+                    "type": "string | null",
+                    "optional": false,
+                    "description": "",
+                    "line": 8
+                },
+                {
+                    "name": "user",
+                    "type": "RegisterUser | null",
+                    "optional": false,
+                    "description": "",
+                    "line": 7
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 150,
+            "methods": []
+        }
+    ],
+    "injectables": [
+        {
+            "name": "BookEffects",
+            "id": "injectable-BookEffects-ad099e9be1894d99d9cb02592d246507",
+            "file": "src/app/books/store/effects/books-effects.ts",
+            "properties": [
+                {
+                    "name": "addBook$",
+                    "defaultValue": "createEffect(() =>\r\n    this.actions$.pipe(\r\n      ofType(bookActionTypes.addBook),\r\n      concatMap((action) => this.bookService.addBook(action.book)),\r\n      tap(() => this.router.navigateByUrl('/home'))\r\n    ),\r\n    {dispatch: false}\r\n  )",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 27
+                },
+                {
+                    "name": "deleteBook$",
+                    "defaultValue": "createEffect(() =>\r\n    this.actions$.pipe(\r\n      ofType(bookActionTypes.deleteBook),\r\n      concatMap((action) => this.bookService.deleteBook(action.bookId))\r\n    ),\r\n    {dispatch: false}\r\n  )",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 36
+                },
+                {
+                    "name": "loadBook$",
+                    "defaultValue": "createEffect(() =>\r\n    this.actions$.pipe(\r\n      ofType(bookActionTypes.loadBook),\r\n      concatMap((action) => this.bookService.getBook(action.bookId)),\r\n      map(book => bookActionTypes.bookLoaded({book: [book]}))\r\n    )\r\n  )",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 19
+                },
+                {
+                    "name": "loadBooks$",
+                    "defaultValue": "createEffect(() =>\r\n    this.actions$.pipe(\r\n      ofType(bookActionTypes.loadBooks),\r\n      concatMap(() => this.bookService.getBooks()),\r\n      map(books => bookActionTypes.booksLoaded({books}))\r\n    )\r\n  )",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 11
+                },
+                {
+                    "name": "updateBook$",
+                    "defaultValue": "createEffect(() =>\r\n    this.actions$.pipe(\r\n      ofType(bookActionTypes.updateBook),\r\n      concatMap((action) => this.bookService.updateBook(action.update.id, action.update.changes)),\r\n      tap(() => this.router.navigateByUrl('/home'))\r\n    ),\r\n    {dispatch: false}\r\n  )",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 44
+                }
+            ],
+            "methods": [],
+            "description": "",
+            "sourceCode": "import { createEffect, Actions, ofType } from '@ngrx/effects';\r\nimport { concatMap, map, tap } from 'rxjs/operators';\r\nimport { Injectable } from '@angular/core';\r\nimport { Router } from '@angular/router';\r\nimport { bookActionTypes } from '../actions/books-actions';\r\nimport { BooksService } from '../../../core/services/books.service';\r\n\r\n@Injectable()\r\nexport class BookEffects {\r\n\r\n  loadBooks$ = createEffect(() =>\r\n    this.actions$.pipe(\r\n      ofType(bookActionTypes.loadBooks),\r\n      concatMap(() => this.bookService.getBooks()),\r\n      map(books => bookActionTypes.booksLoaded({books}))\r\n    )\r\n  );\r\n\r\n  loadBook$ = createEffect(() =>\r\n    this.actions$.pipe(\r\n      ofType(bookActionTypes.loadBook),\r\n      concatMap((action) => this.bookService.getBook(action.bookId)),\r\n      map(book => bookActionTypes.bookLoaded({book: [book]}))\r\n    )\r\n  );\r\n\r\n  addBook$ = createEffect(() =>\r\n    this.actions$.pipe(\r\n      ofType(bookActionTypes.addBook),\r\n      concatMap((action) => this.bookService.addBook(action.book)),\r\n      tap(() => this.router.navigateByUrl('/home'))\r\n    ),\r\n    {dispatch: false}\r\n  );\r\n\r\n  deleteBook$ = createEffect(() =>\r\n    this.actions$.pipe(\r\n      ofType(bookActionTypes.deleteBook),\r\n      concatMap((action) => this.bookService.deleteBook(action.bookId))\r\n    ),\r\n    {dispatch: false}\r\n  );\r\n\r\n  updateBook$ = createEffect(() =>\r\n    this.actions$.pipe(\r\n      ofType(bookActionTypes.updateBook),\r\n      concatMap((action) => this.bookService.updateBook(action.update.id, action.update.changes)),\r\n      tap(() => this.router.navigateByUrl('/home'))\r\n    ),\r\n    {dispatch: false}\r\n  );\r\n\r\n  constructor(private bookService: BooksService, private actions$: Actions, private router: Router) {}\r\n}\r\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "bookService",
+                        "type": "BooksService"
+                    },
+                    {
+                        "name": "actions$",
+                        "type": "Actions"
+                    },
+                    {
+                        "name": "router",
+                        "type": "Router"
+                    }
+                ],
+                "line": 51,
+                "jsdoctags": [
+                    {
+                        "name": "bookService",
+                        "type": "BooksService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "actions$",
+                        "type": "Actions",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "router",
+                        "type": "Router",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "BooksService",
+            "id": "injectable-BooksService-4c113147d428a63511f33ddf1284429a",
+            "file": "src/app/core/services/books.service.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "addBook",
+                    "args": [
+                        {
+                            "name": "payload",
+                            "type": "Book"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Observable<Book>",
+                    "typeParameters": [],
+                    "line": 26,
+                    "jsdoctags": [
+                        {
+                            "name": "payload",
+                            "type": "Book",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "deleteBook",
+                    "args": [
+                        {
+                            "name": "payload",
+                            "type": "number"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 36,
+                    "jsdoctags": [
+                        {
+                            "name": "payload",
+                            "type": "number",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getBook",
+                    "args": [
+                        {
+                            "name": "bookId",
+                            "type": "string | number"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Observable<Book>",
+                    "typeParameters": [],
+                    "line": 21,
+                    "jsdoctags": [
+                        {
+                            "name": "bookId",
+                            "type": "string | number",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getBooks",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "Observable<Book[]>",
+                    "typeParameters": [],
+                    "line": 16
+                },
+                {
+                    "name": "updateBook",
+                    "args": [
+                        {
+                            "name": "bookId",
+                            "type": "string | number"
+                        },
+                        {
+                            "name": "changes",
+                            "type": "Partial<Book>"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Observable<Book>",
+                    "typeParameters": [],
+                    "line": 31,
+                    "jsdoctags": [
+                        {
+                            "name": "bookId",
+                            "type": "string | number",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "changes",
+                            "type": "Partial<Book>",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "description": "",
+            "sourceCode": "import { Injectable } from '@angular/core';\r\nimport { HttpClient } from '@angular/common/http';\r\nimport { Observable } from 'rxjs';\r\nimport { Book } from '../../models/book';\r\nimport { environment } from '../../../environments/environment';\r\n\r\n@Injectable({\r\n  providedIn: 'root'\r\n})\r\n\r\nexport class BooksService {\r\n\r\n  constructor(private http: HttpClient) {}\r\n\r\n  // Get all books list call to json-server\r\n  getBooks(): Observable<Book[]> {\r\n    return this.http.get<Book[]>(environment.booksUrl);\r\n  }\r\n\r\n  // Get single book details\r\n  getBook(bookId: string | number): Observable<Book> {\r\n    return this.http.get<Book>(`${environment.booksUrl}/${bookId}`);\r\n  }\r\n\r\n  // Add book call to json-server\r\n  addBook(payload: Book): Observable<Book> {\r\n    return this.http.post<Book>(environment.booksUrl, payload);\r\n  }\r\n\r\n  // Update book call to json-srver\r\n  updateBook(bookId: string | number, changes: Partial<Book>): Observable<Book> {\r\n    return this.http.put<Book>(`${environment.booksUrl}/${bookId}`, changes);\r\n  }\r\n\r\n  // Delete book call to json-server\r\n  deleteBook(payload: number): any {\r\n    return this.http.delete(`${environment.booksUrl}/${payload}`);\r\n  }\r\n}\r\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient"
+                    }
+                ],
+                "line": 11,
+                "jsdoctags": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "LoginService",
+            "id": "injectable-LoginService-79a66fba48e26b81e02dc4bca709ba0b",
+            "file": "src/app/core/services/login.service.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "loginUser",
+                    "args": [
+                        {
+                            "name": "user",
+                            "type": "User"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 16,
+                    "jsdoctags": [
+                        {
+                            "name": "user",
+                            "type": "User",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "description": "",
+            "sourceCode": "import { Injectable } from '@angular/core';\nimport { HttpClient } from '@angular/common/http';\nimport { map } from 'rxjs/operators';\nimport { User } from '../../models/login-user';\nimport { environment } from 'src/environments/environment';\n\n@Injectable({\n  providedIn: 'root'\n})\n\nexport class LoginService {\n\n  constructor(private http: HttpClient) { }\n\n  // Login user call to json-server-auth\n  loginUser(user: User): any {\n    return this.http.post(environment.loginUrl, user)\n    .pipe(map(data => {\n        return data;\n    }));\n  }\n}\n\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient"
+                    }
+                ],
+                "line": 11,
+                "jsdoctags": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "RegisterEffects",
+            "id": "injectable-RegisterEffects-9a15234993e702a7d022d34d72cccd40",
+            "file": "src/app/register/store/effects/register-effects.ts",
+            "properties": [
+                {
+                    "name": "login$",
+                    "defaultValue": "this.actions$.pipe(\r\n      ofType(LoginActions.register),\r\n      mergeMap(action =>\r\n        this.registerService.registerUser(action.user).pipe(\r\n          map(res => LoginActions.registerSuccess({accessToken : res})),\r\n          catchError(error => of(LoginActions.registerFailure({error})))\r\n        )\r\n      )\r\n    )",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 11,
+                    "decorators": [
+                        {
+                            "name": "Effect",
+                            "stringifiedArguments": ""
+                        }
+                    ]
+                }
+            ],
+            "methods": [],
+            "description": "",
+            "sourceCode": "import { Injectable } from '@angular/core';\r\nimport { Actions, ofType, Effect } from '@ngrx/effects';\r\nimport { of } from 'rxjs';\r\nimport { map, mergeMap, catchError } from 'rxjs/operators';\r\nimport { RegisterService } from '../../../core/services/register.service';\r\nimport * as LoginActions from '../actions/register-actions';\r\n\r\n@Injectable()\r\nexport class RegisterEffects {\r\n    @Effect()\r\n    login$ = this.actions$.pipe(\r\n      ofType(LoginActions.register),\r\n      mergeMap(action =>\r\n        this.registerService.registerUser(action.user).pipe(\r\n          map(res => LoginActions.registerSuccess({accessToken : res})),\r\n          catchError(error => of(LoginActions.registerFailure({error})))\r\n        )\r\n      )\r\n    );\r\n\r\n  constructor(private actions$: Actions, private registerService: RegisterService) {}\r\n}\r\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "actions$",
+                        "type": "Actions"
+                    },
+                    {
+                        "name": "registerService",
+                        "type": "RegisterService"
+                    }
+                ],
+                "line": 19,
+                "jsdoctags": [
+                    {
+                        "name": "actions$",
+                        "type": "Actions",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "registerService",
+                        "type": "RegisterService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "RegisterService",
+            "id": "injectable-RegisterService-a4c68b0e61470c5ec8e7963fbb6754a7",
+            "file": "src/app/core/services/register.service.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "registerUser",
+                    "args": [
+                        {
+                            "name": "user",
+                            "type": "RegisterUser"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 16,
+                    "jsdoctags": [
+                        {
+                            "name": "user",
+                            "type": "RegisterUser",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "description": "",
+            "sourceCode": "import { Injectable } from '@angular/core';\r\nimport { HttpClient } from '@angular/common/http';\r\nimport { map } from 'rxjs/operators';\r\nimport { RegisterUser } from '../../models/register-user';\r\nimport { environment } from 'src/environments/environment';\r\n\r\n@Injectable({\r\n  providedIn: 'root'\r\n})\r\n\r\nexport class RegisterService {\r\n\r\n  constructor(private http: HttpClient) { }\r\n\r\n  // Register User call to json-server-auth\r\n  registerUser(user: RegisterUser): any {\r\n    return this.http.post(environment.registerUrl, user)\r\n    .pipe(map(data => {\r\n        return data;\r\n    }));\r\n  }\r\n}\r\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient"
+                    }
+                ],
+                "line": 11,
+                "jsdoctags": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "ThemeService",
+            "id": "injectable-ThemeService-512e72dc940e3d3a7169ecb90a2955a8",
+            "file": "src/app/core/services/theme.service.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "setTheme",
+                    "args": [
+                        {
+                            "name": "theme",
+                            "type": "literal type"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 30,
+                    "modifierKind": [
+                        112
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "theme",
+                            "type": "literal type",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "toggleDark",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 20
+                },
+                {
+                    "name": "toggleLight",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 25
+                }
+            ],
+            "description": "",
+            "sourceCode": "import { Injectable } from '@angular/core';\r\n\r\n// Dark theme properties\r\nexport const darkTheme = {\r\n  'primary-color': '#484848',\r\n  'background-color': '#B0B0B0',\r\n  'text-color': 'white'\r\n};\r\n\r\n// Light theme properties\r\nexport const lightTheme = {\r\n  'primary-color': '#E74C3C',\r\n  'background-color': 'white',\r\n  'text-color': 'white'\r\n};\r\n\r\n@Injectable({ providedIn: 'root' })\r\nexport class ThemeService {\r\n  // Set dark theme\r\n  toggleDark(): void {\r\n    this.setTheme(darkTheme);\r\n  }\r\n\r\n  // set light theme\r\n  toggleLight(): void {\r\n    this.setTheme(lightTheme);\r\n  }\r\n\r\n  // set properties of root variables\r\n  private setTheme(theme: {}): void {\r\n    Object.keys(theme).forEach(k =>\r\n      document.documentElement.style.setProperty(`--${k}`, theme[k])\r\n    );\r\n  }\r\n}\r\n\r\n",
+            "type": "injectable"
+        },
+        {
+            "name": "UserEffects",
+            "id": "injectable-UserEffects-af08187ed64c963bc77116f971fc0b5f",
+            "file": "src/app/login/store/effects/login-effects.ts",
+            "properties": [
+                {
+                    "name": "login$",
+                    "defaultValue": "this.actions$.pipe(\r\n      ofType(LoginActions.login),\r\n      mergeMap(action =>\r\n        this.authService.loginUser(action.user).pipe(\r\n          map(res => LoginActions.loginSuccess({accessToken : res})),\r\n          catchError(error => of(LoginActions.loginFailure({error})))\r\n        )\r\n      )\r\n    )",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 11,
+                    "decorators": [
+                        {
+                            "name": "Effect",
+                            "stringifiedArguments": ""
+                        }
+                    ]
+                }
+            ],
+            "methods": [],
+            "description": "",
+            "sourceCode": "import { Injectable } from '@angular/core';\r\nimport { Actions, ofType, Effect } from '@ngrx/effects';\r\nimport { of } from 'rxjs';\r\nimport { map, mergeMap, catchError } from 'rxjs/operators';\r\nimport { LoginService } from '../../../core/services/login.service';\r\nimport * as LoginActions from '../actions/login-actions';\r\n\r\n@Injectable()\r\nexport class UserEffects {\r\n    @Effect()\r\n    login$ = this.actions$.pipe(\r\n      ofType(LoginActions.login),\r\n      mergeMap(action =>\r\n        this.authService.loginUser(action.user).pipe(\r\n          map(res => LoginActions.loginSuccess({accessToken : res})),\r\n          catchError(error => of(LoginActions.loginFailure({error})))\r\n        )\r\n      )\r\n    );\r\n\r\n  constructor(private actions$: Actions, private authService: LoginService) {}\r\n}\r\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "actions$",
+                        "type": "Actions"
+                    },
+                    {
+                        "name": "authService",
+                        "type": "LoginService"
+                    }
+                ],
+                "line": 19,
+                "jsdoctags": [
+                    {
+                        "name": "actions$",
+                        "type": "Actions",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "authService",
+                        "type": "LoginService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        }
+    ],
+    "classes": [
+        {
+            "name": "AppPage",
+            "id": "class-AppPage-a0db91bfa3b9914e9048612074084ee6",
+            "file": "e2e/src/app.po.ts",
+            "type": "class",
+            "sourceCode": "import { browser, by, element } from 'protractor';\n\nexport class AppPage {\n  navigateTo(): Promise<unknown> {\n    return browser.get(browser.baseUrl) as Promise<unknown>;\n  }\n\n  getTitleText(): Promise<string> {\n    return element(by.css('app-root .content span')).getText() as Promise<string>;\n  }\n}\n",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "getTitleText",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "Promise<string>",
+                    "typeParameters": [],
+                    "line": 8
+                },
+                {
+                    "name": "navigateTo",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "Promise<unknown>",
+                    "typeParameters": [],
+                    "line": 4
+                }
+            ],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        },
+        {
+            "name": "Book",
+            "id": "class-Book-1981aee4d1c30f01fbf32ccacd8714c8",
+            "file": "src/app/models/book.ts",
+            "type": "class",
+            "sourceCode": "export class Book {\r\n    id: number;\r\n    title: string;\r\n    author: string;\r\n    description: string;\r\n    published: string;\r\n}\r\n",
+            "properties": [
+                {
+                    "name": "author",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 4
+                },
+                {
+                    "name": "description",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 5
+                },
+                {
+                    "name": "id",
+                    "type": "number",
+                    "optional": false,
+                    "description": "",
+                    "line": 2
+                },
+                {
+                    "name": "published",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 6
+                },
+                {
+                    "name": "title",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 3
+                }
+            ],
+            "methods": [],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        },
+        {
+            "name": "RegisterUser",
+            "id": "class-RegisterUser-8975ea9bb1f47b144d1b4f6cc08a54bc",
+            "file": "src/app/models/register-user.ts",
+            "type": "class",
+            "sourceCode": "export class RegisterUser {\r\n    firstname: string;\r\n    lastname: string;\r\n    email: string;\r\n    password: string;\r\n}\r\n",
+            "properties": [
+                {
+                    "name": "email",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 4
+                },
+                {
+                    "name": "firstname",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 2
+                },
+                {
+                    "name": "lastname",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 3
+                },
+                {
+                    "name": "password",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 5
+                }
+            ],
+            "methods": [],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        },
+        {
+            "name": "User",
+            "id": "class-User-23892d3441a4d94c9bce0b3f2733d4f9",
+            "file": "src/app/models/login-user.ts",
+            "type": "class",
+            "sourceCode": "export class User {\n  email: string;\n  password: string;\n}\n",
+            "properties": [
+                {
+                    "name": "email",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 2
+                },
+                {
+                    "name": "password",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 3
+                }
+            ],
+            "methods": [],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        }
+    ],
+    "directives": [],
+    "components": [
+        {
+            "name": "AddEditBookComponent",
+            "id": "component-AddEditBookComponent-7f33efd6596254a400df9a025742ad3b",
+            "file": "src/app/books/add-edit-book/add-edit-book.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-add-edit-book",
+            "styleUrls": [
+                "./add-edit-book.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./add-edit-book.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "book",
+                    "defaultValue": "new Book()",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 18,
+                    "modifierKind": [
+                        114
+                    ]
+                },
+                {
+                    "name": "id",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 20
+                },
+                {
+                    "name": "showAdd",
+                    "defaultValue": "true",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 19
+                },
+                {
+                    "name": "submitted",
+                    "defaultValue": "false",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 17
+                },
+                {
+                    "name": "tempBook",
+                    "type": "Book[]",
+                    "optional": false,
+                    "description": "",
+                    "line": 21
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 40
+                },
+                {
+                    "name": "onSubmit",
+                    "args": [
+                        {
+                            "name": "form",
+                            "type": "NgForm"
+                        },
+                        {
+                            "name": "type",
+                            "type": "string"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 42,
+                    "jsdoctags": [
+                        {
+                            "name": "form",
+                            "type": "NgForm",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "type",
+                            "type": "string",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Store } from '@ngrx/store';\r\nimport { Component, OnInit } from '@angular/core';\r\nimport { ActivatedRoute, Router } from '@angular/router';\r\nimport { Update } from '@ngrx/entity';\r\nimport { Book } from '../../models/book';\r\nimport { addBook, bookActionTypes, bookLoaded, loadBook } from '../store/actions/books-actions';\r\nimport { NgForm } from '@angular/forms';\r\nimport { getBookDetails } from '../store/selectors/books.selector';\r\n\r\n@Component({\r\n  selector: 'app-add-edit-book',\r\n  templateUrl: './add-edit-book.component.html',\r\n  styleUrls: ['./add-edit-book.component.scss']\r\n})\r\n\r\nexport class AddEditBookComponent implements OnInit {\r\n  submitted = false;\r\n  public book = new Book();\r\n  showAdd = true;\r\n  id: string;\r\n  tempBook: Book[];\r\n\r\n  constructor(private store: Store, private router: Router, private route: ActivatedRoute) {\r\n    this.route.paramMap.subscribe((params) => {\r\n      this.id = params.get('id'); // Get edit book id\r\n    });\r\n\r\n    if (this.id) {\r\n      this.showAdd = false; // Hide Add Book button\r\n\r\n      this.store.dispatch(loadBook({bookId: this.id}));\r\n      this.store.select(getBookDetails).subscribe( response => {\r\n        this.tempBook = response;\r\n        this.book = {...this.tempBook[0]}; // Book details to be updated\r\n      });\r\n    }\r\n\r\n  }\r\n\r\n  ngOnInit(): void {}\r\n\r\n  onSubmit(form: NgForm, type: string): void {\r\n    this.submitted = true;\r\n\r\n    if (form.valid) {\r\n      if (type === 'add') {\r\n        this.store.dispatch(addBook({book : this.book})); // dispatch add book action if type is add\r\n      } else {\r\n        if (type === 'edit') {\r\n          // update book payload\r\n          const update: Update<Book> = {\r\n            id: this.book.id,\r\n            changes: {\r\n              ...this.book,\r\n              ...form.value\r\n            }\r\n          };\r\n\r\n          this.store.dispatch(bookActionTypes.updateBook({update})); // dispatch update book action if type is edit\r\n        }\r\n      }\r\n    }\r\n  }\r\n}\r\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "button.btn {\r\n    font-size: 0.9rem;\r\n    line-height: 1.2;\r\n}\r\n\r\n.formContent {\r\n    height: 80%;\r\n    width: 40%;\r\n}\r\n\r\nbutton:disabled {\r\n    background-color: gray;\r\n    color: darkslategray;\r\n    border: none;\r\n    cursor: not-allowed;\r\n}\r\n\r\n@media (min-width: 481px) and (max-width: 768px) {\r\n    .formPane {\r\n        margin-top: 80px;\r\n    }\r\n\r\n    .formContent {\r\n        height: 55%;\r\n        width: 85%;\r\n    }\r\n}\r\n\r\n@media (min-width: 361px) and (max-width: 480px) {\r\n    .formContent {\r\n        height: 70%;\r\n        width: 85%;\r\n    }\r\n}\r\n\r\n@media (min-width: 321px) and (max-width: 360px) {\r\n    .formContent {\r\n        height: 70%;\r\n        width: 85%;\r\n    }\r\n}",
+                    "styleUrl": "./add-edit-book.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "store",
+                        "type": "Store"
+                    },
+                    {
+                        "name": "router",
+                        "type": "Router"
+                    },
+                    {
+                        "name": "route",
+                        "type": "ActivatedRoute"
+                    }
+                ],
+                "line": 21,
+                "jsdoctags": [
+                    {
+                        "name": "store",
+                        "type": "Store",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "router",
+                        "type": "Router",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "route",
+                        "type": "ActivatedRoute",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<div class=\"formPane\">\r\n  <div class=\"formContent\">\r\n    <div class=\"formDiv\">\r\n      <h2 class=\"formHeader\">Add Book Details</h2>\r\n      <form #bookForm=\"ngForm\">\r\n        <div class=\"form-group\">\r\n          <p for=\"title\">Title</p>\r\n          <input\r\n            type=\"text\"\r\n            id=\"title\"\r\n            name=\"title\"\r\n            required\r\n            [(ngModel)]=\"book.title\"/>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <p for=\"author\">Author</p>\r\n          <input\r\n            type=\"text\"\r\n            id=\"author\"\r\n            name=\"author\"\r\n            required\r\n            [(ngModel)]=\"book.author\"/>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <p for=\"side\">Description</p>\r\n          <input\r\n            type=\"text\"\r\n            id=\"description\"\r\n            name=\"description\"\r\n            required\r\n            [(ngModel)]=\"book.description\"/>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <p for=\"published\">Published</p>\r\n          <input\r\n            type=\"text\"\r\n            id=\"published\"\r\n            name=\"published\"\r\n            required\r\n            [(ngModel)]=\"book.published\"/>\r\n        </div>\r\n        <br>\r\n        <button \r\n            [disabled]=\"bookForm.invalid\"\r\n            *ngIf=\"showAdd\"\r\n            class=\"btn buttonPrimary\" \r\n            type=\"button\"\r\n            (click)=\"onSubmit(bookForm, 'add')\">Add\r\n        </button> &nbsp;\r\n        <button\r\n            [disabled]=\"bookForm.invalid\"\r\n            *ngIf=\"!showAdd\"\r\n            class=\"btn buttonPrimary\"\r\n            type=\"button\"\r\n            (click)=\"onSubmit(bookForm, 'edit')\">Update\r\n        </button>&nbsp;\r\n        <button class=\"btn buttonDanger\" routerLink=\"/home\">Cancel</button>\r\n      </form>\r\n      </div>\r\n    </div>\r\n  </div>"
+        },
+        {
+            "name": "AppComponent",
+            "id": "component-AppComponent-49fca86783a76fd244ded2b9afa1964a",
+            "file": "src/app/app.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-root",
+            "styleUrls": [
+                "./app.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./app.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\n\n@Component({\n  selector: 'app-root',\n  templateUrl: './app.component.html',\n  styleUrls: ['./app.component.scss']\n})\n\nexport class AppComponent {}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "",
+                    "styleUrl": "./app.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "templateData": "<app-header></app-header>\n<router-outlet></router-outlet>"
+        },
+        {
+            "name": "BooksComponent",
+            "id": "component-BooksComponent-7bf10609e29561b387b9d5ac5730b714",
+            "file": "src/app/books/books.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-books",
+            "styleUrls": [
+                "./books.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./books.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "books$",
+                    "type": "any",
+                    "optional": false,
+                    "description": "",
+                    "line": 16
+                },
+                {
+                    "name": "isLoggedIn",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 17
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "deleteBook",
+                    "args": [
+                        {
+                            "name": "bookId",
+                            "type": "number"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 32,
+                    "jsdoctags": [
+                        {
+                            "name": "bookId",
+                            "type": "number",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 21
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\nimport { Observable } from 'rxjs';\nimport { Book } from '../models/book';\nimport { Store } from '@ngrx/store';\nimport { getAllBooksList } from './store/selectors/books.selector';\nimport { bookActionTypes } from './store/actions/books-actions';\nimport { authSelector } from '../login/store/selectors/login-selector';\n\n@Component({\n  selector: 'app-books',\n  templateUrl: './books.component.html',\n  styleUrls: ['./books.component.scss']\n})\n\nexport class BooksComponent implements OnInit {\n  books$: any;\n  isLoggedIn: boolean;\n\n  constructor(private store: Store) {}\n\n  ngOnInit(): void {\n    this.store.dispatch(bookActionTypes.loadBooks()); // dispatch load books actions\n    this.store.select(getAllBooksList).subscribe(result =>  this.books$ = result); // get all books list\n    this.store.select(authSelector).subscribe(state => {\n      if (state) {\n        this.isLoggedIn = state.isAuthenticated;\n      }\n    }); // set isLoggedIn to true if logged in\n  }\n\n  // Delete Book function\n  deleteBook(bookId: number): void {\n    this.store.dispatch(bookActionTypes.deleteBook({bookId})); // dispatch delete book action\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "h1{\r\n    text-align: center;\r\n    color: darkred;\r\n}\r\n\r\n.booksTable {\r\n    width: 90%;\r\n    margin-left: 5%;\r\n    border-spacing: 0;\r\n}\r\n\r\n.booksTable th{\r\n    background: #b8d1f3;\r\n    border: none;\r\n}\r\n\r\n.booksTable tr{\r\n    background: #b8d1f3;\r\n    border: none;\r\n    height: 55px;\r\n}\r\n\r\n.booksTable tr:nth-child(odd){ \r\n    background: #f1f3f5;\r\n}\r\n\r\n.booksTable tr:nth-child(even){\r\n    background: #dae5f4;\r\n}\r\n\r\n.addButton {\r\n    margin-left: 89%\r\n}\r\n\r\n@media (min-width: 481px) and (max-width: 768px) {\r\n    .addButton {\r\n        margin-left: 85%;\r\n    }\r\n}\r\n\r\n@media (min-width: 361px) and (max-width: 480px) {\r\n    .addButton {\r\n        margin-left: 85%;\r\n    }\r\n}\r\n\r\n@media (min-width: 321px) and (max-width: 360px) {\r\n    .addButton {\r\n        margin-left: 75%;\r\n    }\r\n\r\n    table{\r\n        overflow-y:scroll;\r\n        display:block;\r\n    }\r\n}\r\n\r\n",
+                    "styleUrl": "./books.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "store",
+                        "type": "Store"
+                    }
+                ],
+                "line": 17,
+                "jsdoctags": [
+                    {
+                        "name": "store",
+                        "type": "Store",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<div class=\"containerPane\">\n  <h1>Book Details</h1>\n  <div>\n    <button *ngIf=\"isLoggedIn\" id=\"addBook\" class=\"btn buttonSuccess addButton\" routerLink=\"add-edit-book\" routerLinkActive=\"active\">Add Book</button>\n  </div>\n  <br>\n  <table class=\"booksTable\">\n    <thead >\n      <tr>\n        <th width=\"15%\">Title</th>\n        <th width=\"15%\">Author</th>\n        <th width=\"45%\">Description</th>\n        <th width=\"12%\">Published</th>\n        <th width=\"12%\" *ngIf=\"isLoggedIn\">Actions</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr *ngFor=\"let book of books$\">\n        <td scope=\"row\">&nbsp;{{book.title}}</td>\n        <td>{{book.author}}</td>\n        <td>{{book.description}}</td>\n        <td>&nbsp;{{book.published}}</td>\n        <td *ngIf=\"isLoggedIn\">\n          <button class=\"btn buttonPrimary\" [routerLink]=\"['add-edit-book', book.id]\">Edit</button> &nbsp; &nbsp;\n          <button class=\"btn buttonDanger\" (click)=\"deleteBook(book.id)\">Delete</button>\n        </td>\n      </tr>\n    </tbody>\n  </table>\n</div>\n"
+        },
+        {
+            "name": "HeaderComponent",
+            "id": "component-HeaderComponent-cf9175dcf3b15cfd8d799d234362b292",
+            "file": "src/app/header/header.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-header",
+            "styleUrls": [
+                "./header.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./header.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "darkTheme",
+                    "defaultValue": "new FormControl(false)",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 15
+                },
+                {
+                    "name": "isLoggedIn",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 14
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "logout",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 40
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 19
+                },
+                {
+                    "name": "onSetTheme",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 29
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\nimport { Store } from '@ngrx/store';\nimport { authSelector } from '../login/store/selectors/login-selector';\nimport { ThemeService } from '../core/services/theme.service';\nimport { FormControl } from '@angular/forms';\n\n@Component({\n  selector: 'app-header',\n  templateUrl: './header.component.html',\n  styleUrls: ['./header.component.scss']\n})\nexport class HeaderComponent implements OnInit {\n\n  isLoggedIn: boolean;\n  darkTheme = new FormControl(false);\n\n  constructor(private store: Store, private themeService: ThemeService) {}\n\n  ngOnInit(): void {\n    // Set isLoggedIn depending if user is authenticated\n    this.store.select(authSelector).subscribe(state => {\n      if (state) {\n        this.isLoggedIn = state.isAuthenticated;\n      }\n    });\n  }\n\n  // Toggle theme dark/light\n  onSetTheme(): void {\n    this.darkTheme.valueChanges.subscribe(value => {\n      if (value) {\n        this.themeService.toggleDark();\n      } else {\n        this.themeService.toggleLight();\n      }\n    });\n\n  }\n\n  logout(): void {\n    localStorage.removeItem('accessToken');\n    window.location.reload();\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": ".headerPane {\r\n    width: 98%;\r\n    height: 50px;\r\n    background-color: var(--primary-color);\r\n    color: var(--text-color);\r\n    font-size: large;\r\n    font-family: 'Segoe UI';\r\n    margin: 0.5%;\r\n}\r\n\r\n.appName {\r\n    font-size: xx-large;\r\n    margin-left: 10px;\r\n    font-weight: bold;\r\n}\r\n\r\n.headerName {\r\n    width: 50%; \r\n    float: left;\r\n}\r\n\r\n.headerButton {\r\n    margin-top: 10px;\r\n    float: right;\r\n    width: 50%;\r\n}\r\n\r\n.appButton {\r\n    background-color: white;\r\n    color: #E74C3C;\r\n    font-size: large;\r\n    border: none;\r\n    cursor: pointer;\r\n    border-radius: 3em;\r\n    width: 80px;\r\n    text-align: center;\r\n    height: 25px;\r\n    text-decoration: none;\r\n}\r\n\r\n.slider.round {\r\n    margin-top: 5px;\r\n    border-radius: 34px;\r\n  }\r\n  \r\n.slider.round:before {\r\n  border-radius: 50%;\r\n}\r\n\r\n.switch {\r\n  position: relative;\r\n  display: inline-block;\r\n  width: 42px;\r\n  height: 25px;\r\n}\r\n\r\n.switch input { \r\n  opacity: 0;\r\n  width: 0;\r\n  height: 0;\r\n}\r\n\r\n.slider {\r\n  position: absolute;\r\n  cursor: pointer;\r\n  top: 0;\r\n  left: 0;\r\n  right: 0;\r\n  bottom: 0;\r\n  background-color: rgb(247, 221, 221);\r\n  -webkit-transition: .4s;\r\n  transition: .4s;\r\n}\r\n\r\n.slider:before {\r\n  position: absolute;\r\n  content: \"\";\r\n  height: 18px;\r\n  width: 18px;\r\n  left: 4px;\r\n  bottom: 1px;\r\n  background-color: white;\r\n  -webkit-transition: .4s;\r\n  transition: .4s;\r\n}\r\n\r\ninput:checked + .slider {\r\n  background-color: #B0B0B0;\r\n}\r\n\r\ninput:focus + .slider {\r\n  box-shadow: 0 0 1px #B0B0B0;\r\n}\r\n\r\ninput:checked + .slider:before {\r\n  -webkit-transform: translateX(16px);\r\n  -ms-transform: translateX(16px);\r\n  transform: translateX(16px);\r\n}\r\n\r\n.logInButton {\r\n  margin-left: 66%;\r\n}\r\n\r\n.logOutButton {\r\n  margin-left: 78%;\r\n}\r\n\r\n.regThemeButton {\r\n  margin-left: 1%;\r\n}\r\n\r\n\r\n@media (min-width: 1025px) and (max-width: 1366px) {\r\n  .headerPane {\r\n    width: 97%;\r\n    height: 50px;\r\n    font-size: large;\r\n  }\r\n\r\n  .appName {\r\n      font-size: 28px;\r\n      margin-left: 10px;\r\n      font-weight: bold;\r\n  }\r\n\r\n  .headerName {\r\n      width: 50%; \r\n      float: left;\r\n  }\r\n\r\n  .headerButton {\r\n      margin-top: 10px;\r\n      float: right;\r\n      width: 50%;\r\n  }\r\n\r\n  .appButton {\r\n      font-size: large;\r\n      width: 75px;\r\n      height: 25px;\r\n  }\r\n\r\n  .logInButton {\r\n    margin-left: 60%;\r\n  }\r\n  \r\n  .logOutButton {\r\n    margin-left: 70%;\r\n  }\r\n  \r\n  .regThemeButton {\r\n    margin-left: 1%;\r\n  }\r\n\r\n}\r\n\r\n@media (min-width: 481px) and (max-width: 768px) {\r\n  .headerPane {\r\n    width: 98%;\r\n    height: 50px;\r\n    font-size: large;\r\n  }\r\n\r\n  .appName {\r\n      font-size: 28px;\r\n      margin-left: 10px;\r\n      font-weight: bold;\r\n  }\r\n\r\n  .headerName {\r\n      width: 50%; \r\n      float: left;\r\n  }\r\n\r\n  .headerButton {\r\n      margin-top: 10px;\r\n      float: right;\r\n      width: 50%;\r\n  }\r\n\r\n  .appButton {\r\n      font-size: large;\r\n      width: 75px;\r\n      height: 25px;\r\n  }\r\n\r\n  .logInButton {\r\n    margin-left: 40%;\r\n  }\r\n  \r\n  .logOutButton {\r\n    margin-left: 60%;\r\n  }\r\n  \r\n  .regThemeButton {\r\n    margin-left: 1%;\r\n  }\r\n\r\n}\r\n\r\n@media (min-width: 481px) and (max-width: 768px) {\r\n  .headerPane {\r\n    width: 98%;\r\n    height: 50px;\r\n    font-size: large;\r\n  }\r\n\r\n  .appName {\r\n      font-size: 28px;\r\n      margin-left: 10px;\r\n      font-weight: bold;\r\n  }\r\n\r\n  .headerName {\r\n      width: 50%; \r\n      float: left;\r\n  }\r\n\r\n  .headerButton {\r\n      margin-top: 10px;\r\n      float: right;\r\n      width: 50%;\r\n  }\r\n\r\n  .appButton {\r\n      font-size: large;\r\n      width: 75px;\r\n      height: 25px;\r\n  }\r\n\r\n  .logInButton {\r\n    margin-left: 40%;\r\n  }\r\n  \r\n  .logOutButton {\r\n    margin-left: 60%;\r\n  }\r\n  \r\n  .regThemeButton {\r\n    margin-left: 1%;\r\n  }\r\n\r\n}\r\n\r\n@media (min-width: 361px) and (max-width: 480px) {\r\n  .headerPane {\r\n    width: 98%;\r\n    height: 50px;\r\n    font-size: small;\r\n  }\r\n\r\n  .appName {\r\n      font-size: 28px;\r\n      margin-left: 10px;\r\n      font-weight: bold;\r\n  }\r\n\r\n  .headerName {\r\n      width: 50%; \r\n      float: left;\r\n  }\r\n\r\n  .headerButton {\r\n      margin-top: 10px;\r\n      float: right;\r\n      width: 50%;\r\n  }\r\n\r\n  .appButton {\r\n      font-size: large;\r\n      width: 60px;\r\n      height: 25px;\r\n  }\r\n\r\n  .logInButton {\r\n    margin-left: 50%;\r\n  }\r\n  \r\n  .logOutButton {\r\n    margin-left: 60%;\r\n  }\r\n  \r\n  .regThemeButton {\r\n    margin-left: 1%;\r\n  }\r\n\r\n  .slider.round {\r\n    margin-top: 0px;\r\n  }\r\n\r\n  .slider {\r\n    bottom: 3px;\r\n  }\r\n\r\n}\r\n\r\n@media (min-width: 321px) and (max-width: 360px) {\r\n  .headerPane {\r\n    width: 98%;\r\n    height: 50px;\r\n    font-size: small;\r\n  }\r\n\r\n  .appName {\r\n      font-size: 18px;\r\n      margin-left: 10px;\r\n      font-weight: bold;\r\n  }\r\n\r\n  .headerName {\r\n      width: 50%; \r\n      float: left;\r\n  }\r\n\r\n  .headerButton {\r\n      margin-top: 10px;\r\n      float: right;\r\n      width: 50%;\r\n  }\r\n\r\n  .appButton {\r\n      font-size: small;\r\n      width: 60px;\r\n      height: 25px;\r\n  }\r\n\r\n  .logInButton {\r\n    margin-left: 0%;\r\n  }\r\n  \r\n  .logOutButton {\r\n    margin-left: 1%;\r\n  }\r\n  \r\n  .regThemeButton {\r\n    margin-left: 1%;\r\n  }\r\n\r\n  .slider.round {\r\n    margin-top: 0px;\r\n  }\r\n\r\n  .slider {\r\n    bottom: 3px;\r\n  }\r\n\r\n}\r\n\r\n@media (min-width: 300px) and (max-width: 320px) {\r\n  .headerPane {\r\n    width: 98%;\r\n    height: 50px;\r\n    font-size: small;\r\n  }\r\n\r\n  .appName {\r\n      font-size: 18px;\r\n      margin-left: 10px;\r\n      font-weight: bold;\r\n  }\r\n\r\n  .headerName {\r\n      width: 50%; \r\n      float: left;\r\n  }\r\n\r\n  .headerButton {\r\n      margin-top: 10px;\r\n      float: right;\r\n      width: 50%;\r\n  }\r\n\r\n  .appButton {\r\n      font-size: small;\r\n      width: 60px;\r\n      height: 25px;\r\n  }\r\n\r\n  .logInButton {\r\n    margin-left: 0%;\r\n  }\r\n  \r\n  .logOutButton {\r\n    margin-left: 1%;\r\n  }\r\n  \r\n  .regThemeButton {\r\n    margin-left: 1%;\r\n  }\r\n\r\n  .slider.round {\r\n    margin-top: 0px;\r\n  }\r\n\r\n  .slider {\r\n    bottom: 3px;\r\n  }\r\n}\r\n  ",
+                    "styleUrl": "./header.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "store",
+                        "type": "Store"
+                    },
+                    {
+                        "name": "themeService",
+                        "type": "ThemeService"
+                    }
+                ],
+                "line": 15,
+                "jsdoctags": [
+                    {
+                        "name": "store",
+                        "type": "Store",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "themeService",
+                        "type": "ThemeService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<div class=\"headerPane\" color=\"primary\" id=\"headerSection\">\n    <div class=\"headerName\"><span class=\"appName\">Books Shared Application </span></div>\n    <div class=\"headerButton\">\n        <button id=\"loginLink\" class=\"appButton logInButton\" routerLink=\"/login\" *ngIf=\"!isLoggedIn\">Login</button>\n        <button class=\"appButton logOutButton\" (click)=\"logout()\" *ngIf=\"isLoggedIn\">Logout</button>\n        <button class=\"appButton regThemeButton\" routerLink=\"/register\" *ngIf=\"!isLoggedIn\">Register</button>\n        <label class=\"switch\" style=\"margin-left: 1%;\">\n            <input id=\"darkTheme\" type=\"checkbox\" (click)=\"onSetTheme()\" [formControl]=\"darkTheme\">\n            <span class=\"slider round\"></span>\n        </label>\n    </div>\n</div>"
+        },
+        {
+            "name": "LoginUserComponent",
+            "id": "component-LoginUserComponent-791037249a0afed168f13034dc9dd0c2",
+            "file": "src/app/login/components/login-user/login-user.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-login-user",
+            "styleUrls": [
+                "./login-user.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./login-user.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "error",
+                    "type": "any",
+                    "optional": false,
+                    "description": "",
+                    "line": 16
+                },
+                {
+                    "name": "form",
+                    "type": "FormGroup",
+                    "optional": false,
+                    "description": "",
+                    "line": 14
+                },
+                {
+                    "name": "loginResponse",
+                    "type": "any",
+                    "optional": false,
+                    "description": "",
+                    "line": 17
+                },
+                {
+                    "name": "submitted",
+                    "defaultValue": "false",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 15
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "navigate",
+                    "args": [
+                        {
+                            "name": "response",
+                            "type": "any"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 51,
+                    "jsdoctags": [
+                        {
+                            "name": "response",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 25
+                },
+                {
+                    "name": "onSubmit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 36
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\nimport { Store } from '@ngrx/store';\nimport { FormGroup, FormBuilder, Validators } from '@angular/forms';\nimport { Router } from '@angular/router';\nimport { login } from '../../store/actions/login-actions';\nimport { authSelector } from '../../store/selectors/login-selector';\n\n@Component({\n  selector: 'app-login-user',\n  templateUrl: './login-user.component.html',\n  styleUrls: ['./login-user.component.scss']\n})\nexport class LoginUserComponent implements OnInit {\n  form: FormGroup;\n  submitted = false;\n  error: any;\n  loginResponse: any;\n\n  constructor(\n      private formBuilder: FormBuilder,\n      private router: Router,\n      private store: Store\n  ) { }\n\n  ngOnInit(): void {\n    // Build Login Form\n      this.form = this.formBuilder.group({\n          email: ['', Validators.required],\n          password: ['', Validators.required]\n      });\n  }\n\n  get f(): any { return this.form.controls; }\n\n  // Login action function\n  onSubmit(): void {\n    this.submitted = true;\n    const payload = { email: this.f.email.value, password: this.f.password.value};\n    if (this.form.valid) {\n      this.store.dispatch(login({ user: payload})); // Dispatch Login Action\n      this.store.select(authSelector).subscribe(res =>  {\n        if (res) {\n          this.loginResponse = res; // LoginSuccess or LoginFailure Response\n          this.navigate(res); // call navigate\n        }\n      });\n    }\n  }\n\n  // Navigate/catch error\n  navigate(response: any): void {\n    if (response.loginToken) {\n      localStorage.setItem('accessToken', response.loginToken);\n      this.router.navigateByUrl('/home'); // If login success redirect to Home page\n    } else {\n        if (localStorage.getItem('accessToken')) {\n          localStorage.removeItem('accessToken');\n        }\n        this.error = response.message; // capture error\n    }\n  }\n}\n\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "button.btn {\r\n    font-size: 0.9rem;\r\n    line-height: 1.2;\r\n}\r\n",
+                    "styleUrl": "./login-user.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "formBuilder",
+                        "type": "FormBuilder"
+                    },
+                    {
+                        "name": "router",
+                        "type": "Router"
+                    },
+                    {
+                        "name": "store",
+                        "type": "Store"
+                    }
+                ],
+                "line": 17,
+                "jsdoctags": [
+                    {
+                        "name": "formBuilder",
+                        "type": "FormBuilder",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "router",
+                        "type": "Router",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "store",
+                        "type": "Store",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "accessors": {
+                "f": {
+                    "name": "f",
+                    "getSignature": {
+                        "name": "f",
+                        "type": "any",
+                        "returnType": "any",
+                        "line": 33
+                    }
+                }
+            },
+            "templateData": "<div class=\"containerPane\">\n<div class=\"loginPane\">\n    <div class=\"loginContent\">\n    <h1 class=\"loginHeader\">Login</h1>\n    <hr>\n        <div class=\"loginDiv\">\n        <div class=\"alert-danger\" *ngIf=\"error\">{{error.error}}</div>\n            <form [formGroup]=\"form\">\n                <div>\n                    <p for=\"username\">Username</p>\n                    <input type=\"text\" formControlName=\"email\" [ngClass]=\"{ 'is-invalid': submitted && f.email.errors }\" />\n                    <div *ngIf=\"submitted && f.email.errors\" class=\"alert-danger\">\n                        <div *ngIf=\"f.email.errors.required\">Username is required</div>\n                    </div>\n                </div>\n                <div>\n                    <p for=\"password\">Password</p>\n                    <input type=\"password\" formControlName=\"password\" [ngClass]=\"{ 'is-invalid': submitted && f.password.errors }\" />\n                    <div *ngIf=\"submitted && f.password.errors\" class=\"alert-danger\">\n                        <div *ngIf=\"f.password.errors.required\">Password is required</div>\n                    </div>\n                </div>\n                <br>\n                <br>\n                <div>\n                    <button class=\"btn buttonPrimary\" (click)=\"onSubmit()\">Login</button>&nbsp; &nbsp;\n                    <button class=\"btn buttonDanger\" routerLink=\"/home\">Cancel</button>\n                </div>\n            </form>\n            <br>\n            <p>\n                Don't have an account? Register <a routerLink=\"../register\">here</a>\n            </p>\n        </div>\n    </div>\n</div>\n</div>\n\n"
+        },
+        {
+            "name": "RegisterUserComponent",
+            "id": "component-RegisterUserComponent-206f8ceb8c117765958bbd70cb73e604",
+            "file": "src/app/register/components/register-user/register-user.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-register-user",
+            "styleUrls": [
+                "./register-user.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./register-user.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "error",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 20
+                },
+                {
+                    "name": "form",
+                    "type": "FormGroup",
+                    "optional": false,
+                    "description": "",
+                    "line": 16
+                },
+                {
+                    "name": "registerResponse",
+                    "type": "any",
+                    "optional": false,
+                    "description": "",
+                    "line": 19
+                },
+                {
+                    "name": "submitted",
+                    "defaultValue": "false",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 17
+                },
+                {
+                    "name": "user",
+                    "defaultValue": "new RegisterUser()",
+                    "type": "RegisterUser",
+                    "optional": false,
+                    "description": "",
+                    "line": 18
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "navigate",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 63
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 24
+                },
+                {
+                    "name": "onSubmit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 37
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\nimport { Store } from '@ngrx/store';\nimport { Router } from '@angular/router';\nimport { Validators, FormBuilder, FormGroup } from '@angular/forms';\nimport { RegisterUser } from '../../../models/register-user';\nimport * as RegisterActions from '../../store/actions/register-actions';\nimport { register } from '../../store/actions/register-actions';\n\n@Component({\n  selector: 'app-register-user',\n  templateUrl: './register-user.component.html',\n  styleUrls: ['./register-user.component.scss']\n})\n\nexport class RegisterUserComponent implements OnInit {\n  form: FormGroup;\n  submitted = false;\n  user: RegisterUser = new RegisterUser();\n  registerResponse: any;\n  error: string;\n\n  constructor(private store: Store, private router: Router, private formBuilder: FormBuilder) { }\n\n  ngOnInit(): void {\n    // Build Register Form\n    this.form = this.formBuilder.group({\n      firstname: ['', Validators.required],\n      lastname: ['', Validators.required],\n      email: ['', Validators.required],\n      password: ['', Validators.required]\n    });\n  }\n\n  get f(): any { return this.form.controls; }\n\n  // Register user actions\n  onSubmit(): void {\n    this.submitted = true;\n    // Register user payload\n    const payload = {\n      firstname: this.f.firstname.value,\n      lastname: this.f.lastname.value,\n      email: this.f.email.value,\n      password: this.f.password.value\n    };\n\n    if (this.form.valid) {\n      this.store.dispatch(RegisterActions.register({ user: payload})); // Dispatch register action\n      this.store.select(register).subscribe( response => {\n      this.registerResponse = response;\n      if (this.registerResponse.register.token) {\n        this.navigate(); // call navigate after successful registeration\n      } else {\n        if (this.registerResponse.register.message) {\n          this.error = this.registerResponse.register.message.error; // catch error\n        }\n      }\n    });\n   }\n  }\n\n  // Navigate to login page function\n  navigate(): void {\n    this.router.navigateByUrl('/login'); // redirect to login page\n  }\n}\n\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "button.btn {\r\n    font-size: 0.9rem;\r\n    line-height: 1.2;\r\n}\r\n\r\n.loginContent {\r\n    height: 77%;\r\n}\r\n\r\n.loginPane {\r\n    margin-top: 30px;\r\n}\r\n\r\n@media (min-width: 481px) and (max-width: 768px) {\r\n    .loginContent {\r\n        height: 60%;\r\n    }\r\n}\r\n\r\n@media (min-width: 360px) and (max-width: 480px) {\r\n    .loginContent {\r\n        height: 100%;\r\n    }\r\n}\r\n\r\n@media (min-width: 321px) and (max-width: 360px) {\r\n    .loginContent {\r\n        height: 100%;\r\n    }\r\n}",
+                    "styleUrl": "./register-user.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "store",
+                        "type": "Store"
+                    },
+                    {
+                        "name": "router",
+                        "type": "Router"
+                    },
+                    {
+                        "name": "formBuilder",
+                        "type": "FormBuilder"
+                    }
+                ],
+                "line": 20,
+                "jsdoctags": [
+                    {
+                        "name": "store",
+                        "type": "Store",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "router",
+                        "type": "Router",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "formBuilder",
+                        "type": "FormBuilder",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "accessors": {
+                "f": {
+                    "name": "f",
+                    "getSignature": {
+                        "name": "f",
+                        "type": "any",
+                        "returnType": "any",
+                        "line": 34
+                    }
+                }
+            },
+            "templateData": "<div class=\"containerPane\">\n<div class=\"loginPane\">\n    <div class=\"loginContent\">\n    <h1 class=\"loginHeader\">Register</h1>\n    <hr>\n    <p class=\"alert-danger\">{{error}}</p>\n    <div class=\"loginDiv\">\n        <form [formGroup]=\"form\">\n            <div>\n                <p for=\"firstname\">First Name</p>\n                <input type=\"text\" formControlName=\"firstname\" [ngClass]=\"{ 'is-invalid': submitted && f.firstname.errors }\" />\n                <div *ngIf=\"submitted && f.firstname.errors\" class=\"alert-danger\">\n                    <div *ngIf=\"f.firstname.errors.required\">First Name is required</div>\n                </div>\n            </div>\n            <div>\n                <p for=\"lastname\">Last Name</p>\n                <input type=\"text\" formControlName=\"lastname\" [ngClass]=\"{ 'is-invalid': submitted && f.lastname.errors }\" />\n                <div *ngIf=\"submitted && f.lastname.errors\" class=\"alert-danger\">\n                    <div *ngIf=\"f.lastname.errors.required\">First Name is required</div>\n                </div>\n            </div>\n            <div>\n                <p for=\"email\">Email ID</p>\n                <input type=\"text\" formControlName=\"email\" [ngClass]=\"{ 'is-invalid': submitted && f.email.errors }\" />\n                <div *ngIf=\"submitted && f.email.errors\" class=\"alert-danger\">\n                    <div *ngIf=\"f.email.errors.required\">First Name is required</div>\n                </div>\n            </div>\n            <div>\n                <p for=\"password\">Password</p>\n                <input type=\"password\" formControlName=\"password\" [ngClass]=\"{ 'is-invalid': submitted && f.password.errors }\" />\n                <div *ngIf=\"submitted && f.password.errors\" class=\"alert-danger\">\n                    <div *ngIf=\"f.password.errors.required\">Password is required</div>\n                </div>\n            </div>\n            <br>\n            <div>\n                <button  class=\"btn buttonPrimary\" (click)=\"onSubmit()\">Register</button> &nbsp; &nbsp;\n                <button class=\"btn buttonDanger\" routerLink=\"/home\">Cancel</button>\n            </div>\n        </form>\n        <p>\n            Already have an account? <a routerLink=\"../login\">Login</a>\n        </p>\n    </div>\n    </div>\n</div>\n</div>"
+        }
+    ],
+    "modules": [
+        {
+            "name": "AppModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": [
+                        {
+                            "name": "ThemeService"
+                        }
+                    ]
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "AppComponent"
+                        },
+                        {
+                            "name": "HeaderComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": [
+                        {
+                            "name": "AppComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "BookRoutingModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "BooksModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": [
+                        {
+                            "name": "BooksService"
+                        }
+                    ]
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "AddEditBookComponent"
+                        },
+                        {
+                            "name": "BooksComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": [
+                        {
+                            "name": "BookRoutingModule"
+                        }
+                    ]
+                },
+                {
+                    "type": "exports",
+                    "elements": [
+                        {
+                            "name": "AddEditBookComponent"
+                        },
+                        {
+                            "name": "BooksComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "LoginModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "LoginUserComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": [
+                        {
+                            "name": "LoginRoutingModule"
+                        }
+                    ]
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "LoginRoutingModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "RegisterModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "RegisterUserComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": [
+                        {
+                            "name": "RegisterRoutingModule"
+                        }
+                    ]
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "RegisterRoutingModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        }
+    ],
+    "miscellaneous": {
+        "variables": [
+            {
+                "name": "adapter",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/books/store/reducers/books-reducer.ts",
+                "type": "EntityAdapter<Book>",
+                "defaultValue": "createEntityAdapter<Book>()"
+            },
+            {
+                "name": "add",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/addeditbook.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "addBook",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/books/store/actions/books-actions.ts",
+                "type": "",
+                "defaultValue": "createAction(\r\n  '[Add Book Component] Add Book',\r\n  props<{book: Book}>()\r\n)"
+            },
+            {
+                "name": "AppRoutingModule",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/app-routing.module.ts",
+                "type": "",
+                "defaultValue": "RouterModule.forRoot(routes)"
+            },
+            {
+                "name": "authSelector",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/login/store/selectors/login-selector.ts",
+                "type": "",
+                "defaultValue": "createSelector(getAuthReferenceState, state => state)"
+            },
+            {
+                "name": "bookActionTypes",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/books/store/actions/books-actions.ts",
+                "type": "object",
+                "defaultValue": "{\r\n  loadBooks,\r\n  booksLoaded,\r\n  addBook,\r\n  deleteBook,\r\n  updateBook,\r\n  loadBook,\r\n  bookLoaded\r\n}"
+            },
+            {
+                "name": "bookList",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/addeditbook.stories.ts",
+                "type": "object",
+                "defaultValue": "{\r\n    id: 1,\r\n    title: 'StoryBook',\r\n    author: 'James',\r\n    description: 'Test Book',\r\n    published: '2007'\r\n}"
+            },
+            {
+                "name": "bookLoaded",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/books/store/actions/books-actions.ts",
+                "type": "",
+                "defaultValue": "createAction(\r\n  '[Book Effect] Book Loaded Successfully',\r\n  props<{book: Book[]}>()\r\n)"
+            },
+            {
+                "name": "bookReducer",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/books/store/reducers/books-reducer.ts",
+                "type": "",
+                "defaultValue": "createReducer(\r\n  initialState,\r\n\r\n  // books loaded reducer\r\n  on(bookActionTypes.booksLoaded, (state, action) => {\r\n    return adapter.setAll(\r\n      action.books,\r\n      {...state, booksLoaded: true}\r\n    );\r\n  }),\r\n\r\n  // book loaded reducer\r\n  on(bookActionTypes.bookLoaded, (state, action) => {\r\n    return adapter.setAll(\r\n      action.book,\r\n      {...state, bookLoaded: true}\r\n    );\r\n  }),\r\n\r\n  // add book reducer\r\n  on(bookActionTypes.addBook, (state, action) => {\r\n    return adapter.addOne(action.book, state);\r\n  }),\r\n\r\n  // delete book reducer\r\n  on(bookActionTypes.deleteBook, (state, action) => {\r\n    return adapter.removeOne(action.bookId, state);\r\n  }),\r\n\r\n  // update book reducer\r\n  on(bookActionTypes.updateBook, (state, action) => {\r\n    return adapter.updateOne(action.update, state);\r\n  })\r\n)"
+            },
+            {
+                "name": "booksFeatureSelector",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/books/store/selectors/books.selector.ts",
+                "type": "",
+                "defaultValue": "createFeatureSelector<BookState>('books')"
+            },
+            {
+                "name": "booksList",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/books.stories.ts",
+                "type": "[]",
+                "defaultValue": "[\r\n    {\r\n        id: 1,\r\n        title: 'StoryBook',\r\n        author: 'James',\r\n        description: 'Test Book',\r\n        published: '2007'\r\n    },\r\n    {\r\n        id: 2,\r\n        title: 'StoryBook Test',\r\n        author: 'Ravi',\r\n        description: 'Test Book',\r\n        published: '2019'\r\n    }\r\n]"
+            },
+            {
+                "name": "booksLoaded",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/books/store/actions/books-actions.ts",
+                "type": "",
+                "defaultValue": "createAction(\r\n  '[Books Effect] Books Loaded Successfully',\r\n  props<{books: Book[]}>()\r\n)"
+            },
+            {
+                "name": "booksModule",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/app-routing.module.ts",
+                "type": "",
+                "defaultValue": "() => import('./books/books.module').then(x => x.BooksModule)"
+            },
+            {
+                "name": "booksModule",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/app.stories.ts",
+                "type": "",
+                "defaultValue": "() => import('../app/books/books.module').then(x => x.BooksModule)"
+            },
+            {
+                "name": "configureTests",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/test-config.helper.ts",
+                "type": "",
+                "defaultValue": "(\n  configure: ConfigureFn,\n  compilerOptions: CompilerOptions = {}\n) => {\n  const compilerConfig: CompilerOptions = {\n    preserveWhitespaces: false,\n    ...compilerOptions,\n  };\n\n  const configuredTestBed = TestBed.configureCompiler(compilerConfig);\n\n  configure(configuredTestBed);\n\n  return configuredTestBed.compileComponents().then(() => configuredTestBed);\n}"
+            },
+            {
+                "name": "darkTheme",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/core/services/theme.service.ts",
+                "type": "object",
+                "defaultValue": "{\r\n  'primary-color': '#484848',\r\n  'background-color': '#B0B0B0',\r\n  'text-color': 'white'\r\n}"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/books.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/app.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/header.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "deleteBook",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/books/store/actions/books-actions.ts",
+                "type": "",
+                "defaultValue": "createAction(\r\n  '[Books List Operations] Delete Book',\r\n  props<{bookId: number}>()\r\n)"
+            },
+            {
+                "name": "edit",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/addeditbook.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "environment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/environments/environment.prod.ts",
+                "type": "object",
+                "defaultValue": "{\n  production: true\n}"
+            },
+            {
+                "name": "environment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/environments/environment.ts",
+                "type": "object",
+                "defaultValue": "{\n  production: false,\n  apiUrl: 'http://localhost:3000',\n  booksUrl: 'http://localhost:3000/booksList',\n  loginUrl: 'http://localhost:3000/login',\n  registerUrl: 'http://localhost:3000/register'\n}"
+            },
+            {
+                "name": "getAllBooksList",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/books/store/selectors/books.selector.ts",
+                "type": "",
+                "defaultValue": "createSelector(\r\n  booksFeatureSelector,\r\n  selectAll\r\n)"
+            },
+            {
+                "name": "getAuthReferenceState",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/login/store/selectors/login-selector.ts",
+                "type": "",
+                "defaultValue": "createFeatureSelector<AuthState>('user')"
+            },
+            {
+                "name": "getBookDetails",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/books/store/selectors/books.selector.ts",
+                "type": "",
+                "defaultValue": "createSelector(\r\n  booksFeatureSelector,\r\n  selectAll\r\n)"
+            },
+            {
+                "name": "getCurrentBookId",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/books/store/selectors/books.selector.ts",
+                "type": "",
+                "defaultValue": "createSelector(\r\n    booksFeatureSelector,\r\n    (state: BookState) => state.selectedBookId\r\n)"
+            },
+            {
+                "name": "getRegisterReferenceState",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/register/store/selectors/register-selector.ts",
+                "type": "",
+                "defaultValue": "createFeatureSelector<RegisterState>('register')"
+            },
+            {
+                "name": "initialState",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/books/store/reducers/books-reducer.ts",
+                "type": "",
+                "defaultValue": "adapter.getInitialState({\r\n  booksLoaded: false,\r\n  selectedBookId: null\r\n})"
+            },
+            {
+                "name": "initialState",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/register/store/reducers/register-reducer.ts",
+                "type": "RegisterState",
+                "defaultValue": "{\r\n  isRegistered: false,\r\n  user: null,\r\n  token : null,\r\n  message : null\r\n}"
+            },
+            {
+                "name": "initialState",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/login/store/reducers/login-reducer.ts",
+                "type": "AuthState",
+                "defaultValue": "{\r\n  isAuthenticated : false,\r\n  loginToken : null,\r\n  message : null,\r\n}"
+            },
+            {
+                "name": "lightTheme",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/core/services/theme.service.ts",
+                "type": "object",
+                "defaultValue": "{\r\n  'primary-color': '#E74C3C',\r\n  'background-color': 'white',\r\n  'text-color': 'white'\r\n}"
+            },
+            {
+                "name": "loadBook",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/books/store/actions/books-actions.ts",
+                "type": "",
+                "defaultValue": "createAction(\r\n  '[Book List] Load Book via Service',\r\n  props<{bookId: string | number}>()\r\n  )"
+            },
+            {
+                "name": "loadBooks",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/books/store/actions/books-actions.ts",
+                "type": "",
+                "defaultValue": "createAction(\r\n'[Books List] Load Books List via Service',\r\n)"
+            },
+            {
+                "name": "login",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/login.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "login",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/login/store/actions/login-actions.ts",
+                "type": "",
+                "defaultValue": "createAction('[Auth] Login', props<{ user: User }>())"
+            },
+            {
+                "name": "LoginError",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/login.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "loginFailure",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/login/store/actions/login-actions.ts",
+                "type": "",
+                "defaultValue": "createAction('[Auth] Login Failure', props<{error}>())"
+            },
+            {
+                "name": "loginModule",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/app-routing.module.ts",
+                "type": "",
+                "defaultValue": "() => import('./login/login.module').then(x => x.LoginModule)"
+            },
+            {
+                "name": "loginModule",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/app.stories.ts",
+                "type": "",
+                "defaultValue": "() => import('../app/login/login.module').then(x => x.LoginModule)"
+            },
+            {
+                "name": "loginSuccess",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/login/store/actions/login-actions.ts",
+                "type": "",
+                "defaultValue": "createAction('[Auth] Login Success', props<{accessToken}>())"
+            },
+            {
+                "name": "mock",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/setup-jest.ts",
+                "type": "",
+                "defaultValue": "() => {\n  let storage: { [key: string]: string } = {};\n  return {\n    getItem: (key: string) => (key in storage ? storage[key] : null),\n    setItem: (key: string, value: string) => (storage[key] = value || ''),\n    removeItem: (key: string) => delete storage[key],\n    clear: () => (storage = {})\n  };\n}"
+            },
+            {
+                "name": "register",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/register.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "register",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/register/store/actions/register-actions.ts",
+                "type": "",
+                "defaultValue": "createAction('[Auth] Register', props<{ user: RegisterUser }>())"
+            },
+            {
+                "name": "RegisterError",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/register.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "registerFailure",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/register/store/actions/register-actions.ts",
+                "type": "",
+                "defaultValue": "createAction('[Auth] Register Failure', props<{error}>())"
+            },
+            {
+                "name": "registerModule",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/app-routing.module.ts",
+                "type": "",
+                "defaultValue": "() => import('./register/register.module').then(x => x.RegisterModule)"
+            },
+            {
+                "name": "registerModule",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/app.stories.ts",
+                "type": "",
+                "defaultValue": "() => import('../app/register/register.module').then(x => x.RegisterModule)"
+            },
+            {
+                "name": "registerReducer",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/register/store/reducers/register-reducer.ts",
+                "type": "",
+                "defaultValue": "createReducer(\r\n    initialState,\r\n    // Register reducer\r\n    on(RegisterActions.register, (state, action) => {\r\n            return {\r\n            ...state,\r\n            isRegistered : false,\r\n            user : action.user,\r\n            token : null,\r\n            message : null\r\n        };\r\n    }),\r\n\r\n    // RegisterSuccess reducer\r\n    on(RegisterActions.registerSuccess, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isRegistered : true,\r\n            user : null,\r\n            token : action.accessToken.accessToken,\r\n            message : null,\r\n        };\r\n    }),\r\n\r\n    // RegisterFailuer reducer\r\n    on(RegisterActions.registerFailure, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isRegistered : false,\r\n            user : null,\r\n            token : null,\r\n            message : action.error,\r\n        };\r\n    })\r\n)"
+            },
+            {
+                "name": "registerSelector",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/register/store/selectors/register-selector.ts",
+                "type": "",
+                "defaultValue": "createSelector(getRegisterReferenceState, state => state)"
+            },
+            {
+                "name": "registerSuccess",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/register/store/actions/register-actions.ts",
+                "type": "",
+                "defaultValue": "createAction('[Auth] Register Success', props<{accessToken}>())"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/addeditbook.stories.ts",
+                "type": "Story<AddEditBookComponent>",
+                "defaultValue": "(args: AddEditBookComponent) => ({\r\n    component: AddEditBookComponent,\r\n    moduleMetadata: {\r\n        declarations: [AddEditBookComponent],\r\n        imports: [\r\n          CommonModule,\r\n          HttpClientModule,\r\n          FormsModule,\r\n          ReactiveFormsModule,\r\n          RouterTestingModule,\r\n          StoreModule.forRoot({}),\r\n          EffectsModule.forRoot([])\r\n        ],\r\n        providers: [BooksService],\r\n        schemas: [CUSTOM_ELEMENTS_SCHEMA]\r\n    },\r\n    props: args\r\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/books.stories.ts",
+                "type": "Story<BooksComponent>",
+                "defaultValue": "(args: BooksComponent) => ({\r\n    component: BooksComponent,\r\n    templateUrl: '../app/books/books.component.html',\r\n    styleUrls: ['../app/books/books.component.scss'],\r\n    moduleMetadata: {\r\n        declarations: [BooksComponent, AddEditBookComponent],\r\n        imports: [\r\n          CommonModule,\r\n          HttpClientModule,\r\n          FormsModule,\r\n          ReactiveFormsModule,\r\n          RouterTestingModule\r\n        ],\r\n        providers: [BooksService],\r\n        schemas: [CUSTOM_ELEMENTS_SCHEMA]\r\n    },\r\n    props: { args, books$: booksList },\r\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/app.stories.ts",
+                "type": "Story<AppComponent>",
+                "defaultValue": "(args: AppComponent) => ({\r\n    component: AppComponent,\r\n    templateUrl: '../app/app.component.html',\r\n    styleUrls: ['../app/app.component.scss'],\r\n    moduleMetadata: {\r\n        declarations: [\r\n            AppComponent,\r\n            HeaderComponent\r\n        ],\r\n        imports: [\r\n            CommonModule,\r\n            BrowserModule,\r\n            AppRoutingModule,\r\n            FormsModule,\r\n            ReactiveFormsModule,\r\n            HttpClientModule,\r\n            RouterModule.forRoot([], { useHash: true }),\r\n            StoreModule.forRoot({user: userReducer, register: registerReducer}),\r\n            EffectsModule.forRoot([UserEffects, RegisterEffects]),\r\n            BrowserAnimationsModule\r\n        ],\r\n        providers: [\r\n            { provide: APP_BASE_HREF, useValue: '/' },\r\n            ThemeService\r\n        ],\r\n        schemas: [CUSTOM_ELEMENTS_SCHEMA],\r\n    },\r\n    props: { args },\r\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/header.stories.ts",
+                "type": "Story<HeaderComponent>",
+                "defaultValue": "(args: HeaderComponent) => ({\n  component: HeaderComponent,\n  props: args\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/register.stories.ts",
+                "type": "Story<RegisterUserComponent>",
+                "defaultValue": "(args: RegisterUserComponent) => ({\r\n  component: RegisterUserComponent,\r\n  props: args\r\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/login.stories.ts",
+                "type": "Story<LoginUserComponent>",
+                "defaultValue": "(args: LoginUserComponent) => ({\r\n  component: LoginUserComponent,\r\n  props: args\r\n})"
+            },
+            {
+                "name": "updateBook",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/books/store/actions/books-actions.ts",
+                "type": "",
+                "defaultValue": "createAction(\r\n  '[Books List Operations] Update Book',\r\n  props<{update: Update<Book>}>()\r\n)"
+            },
+            {
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/books/store/reducers/books-reducer.ts",
+                "type": "",
+                "defaultValue": "adapter.getSelectors()"
+            },
+            {
+                "name": "userReducer",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/login/store/reducers/login-reducer.ts",
+                "type": "",
+                "defaultValue": "createReducer(\r\n    initialState,\r\n    // Login Reducer\r\n    on(LoginActions.login, (state, action) => {\r\n            return {\r\n            ...state,\r\n            isAuthenticated : false,\r\n            loginToken : null,\r\n            message: null\r\n        };\r\n    }),\r\n\r\n    // LoginSuccess Reducer\r\n    on(LoginActions.loginSuccess, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isAuthenticated : true,\r\n            loginToken : action.accessToken.accessToken,\r\n            message : null\r\n        };\r\n    }),\r\n\r\n    // LoginFailure reducer\r\n    on(LoginActions.loginFailure, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isAuthenticated : false,\r\n            loginToken : null,\r\n            message : action.error,\r\n        };\r\n    }),\r\n\r\n)"
+            }
+        ],
+        "functions": [],
+        "typealiases": [
+            {
+                "name": "CompilerOptions",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "Partial<literal type>",
+                "file": "src/test-config.helper.ts",
+                "description": "",
+                "kind": 161
+            },
+            {
+                "name": "ConfigureFn",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "function",
+                "file": "src/test-config.helper.ts",
+                "description": "",
+                "kind": 162
+            }
+        ],
+        "enumerations": [],
+        "groupedVariables": {
+            "src/app/books/store/reducers/books-reducer.ts": [
+                {
+                    "name": "adapter",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/books/store/reducers/books-reducer.ts",
+                    "type": "EntityAdapter<Book>",
+                    "defaultValue": "createEntityAdapter<Book>()"
+                },
+                {
+                    "name": "bookReducer",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/books/store/reducers/books-reducer.ts",
+                    "type": "",
+                    "defaultValue": "createReducer(\r\n  initialState,\r\n\r\n  // books loaded reducer\r\n  on(bookActionTypes.booksLoaded, (state, action) => {\r\n    return adapter.setAll(\r\n      action.books,\r\n      {...state, booksLoaded: true}\r\n    );\r\n  }),\r\n\r\n  // book loaded reducer\r\n  on(bookActionTypes.bookLoaded, (state, action) => {\r\n    return adapter.setAll(\r\n      action.book,\r\n      {...state, bookLoaded: true}\r\n    );\r\n  }),\r\n\r\n  // add book reducer\r\n  on(bookActionTypes.addBook, (state, action) => {\r\n    return adapter.addOne(action.book, state);\r\n  }),\r\n\r\n  // delete book reducer\r\n  on(bookActionTypes.deleteBook, (state, action) => {\r\n    return adapter.removeOne(action.bookId, state);\r\n  }),\r\n\r\n  // update book reducer\r\n  on(bookActionTypes.updateBook, (state, action) => {\r\n    return adapter.updateOne(action.update, state);\r\n  })\r\n)"
+                },
+                {
+                    "name": "initialState",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/books/store/reducers/books-reducer.ts",
+                    "type": "",
+                    "defaultValue": "adapter.getInitialState({\r\n  booksLoaded: false,\r\n  selectedBookId: null\r\n})"
+                },
+                {
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/books/store/reducers/books-reducer.ts",
+                    "type": "",
+                    "defaultValue": "adapter.getSelectors()"
+                }
+            ],
+            "src/stories/addeditbook.stories.ts": [
+                {
+                    "name": "add",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/addeditbook.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "bookList",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/addeditbook.stories.ts",
+                    "type": "object",
+                    "defaultValue": "{\r\n    id: 1,\r\n    title: 'StoryBook',\r\n    author: 'James',\r\n    description: 'Test Book',\r\n    published: '2007'\r\n}"
+                },
+                {
+                    "name": "edit",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/addeditbook.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/addeditbook.stories.ts",
+                    "type": "Story<AddEditBookComponent>",
+                    "defaultValue": "(args: AddEditBookComponent) => ({\r\n    component: AddEditBookComponent,\r\n    moduleMetadata: {\r\n        declarations: [AddEditBookComponent],\r\n        imports: [\r\n          CommonModule,\r\n          HttpClientModule,\r\n          FormsModule,\r\n          ReactiveFormsModule,\r\n          RouterTestingModule,\r\n          StoreModule.forRoot({}),\r\n          EffectsModule.forRoot([])\r\n        ],\r\n        providers: [BooksService],\r\n        schemas: [CUSTOM_ELEMENTS_SCHEMA]\r\n    },\r\n    props: args\r\n})"
+                }
+            ],
+            "src/app/books/store/actions/books-actions.ts": [
+                {
+                    "name": "addBook",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/books/store/actions/books-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction(\r\n  '[Add Book Component] Add Book',\r\n  props<{book: Book}>()\r\n)"
+                },
+                {
+                    "name": "bookActionTypes",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/books/store/actions/books-actions.ts",
+                    "type": "object",
+                    "defaultValue": "{\r\n  loadBooks,\r\n  booksLoaded,\r\n  addBook,\r\n  deleteBook,\r\n  updateBook,\r\n  loadBook,\r\n  bookLoaded\r\n}"
+                },
+                {
+                    "name": "bookLoaded",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/books/store/actions/books-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction(\r\n  '[Book Effect] Book Loaded Successfully',\r\n  props<{book: Book[]}>()\r\n)"
+                },
+                {
+                    "name": "booksLoaded",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/books/store/actions/books-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction(\r\n  '[Books Effect] Books Loaded Successfully',\r\n  props<{books: Book[]}>()\r\n)"
+                },
+                {
+                    "name": "deleteBook",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/books/store/actions/books-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction(\r\n  '[Books List Operations] Delete Book',\r\n  props<{bookId: number}>()\r\n)"
+                },
+                {
+                    "name": "loadBook",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/books/store/actions/books-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction(\r\n  '[Book List] Load Book via Service',\r\n  props<{bookId: string | number}>()\r\n  )"
+                },
+                {
+                    "name": "loadBooks",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/books/store/actions/books-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction(\r\n'[Books List] Load Books List via Service',\r\n)"
+                },
+                {
+                    "name": "updateBook",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/books/store/actions/books-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction(\r\n  '[Books List Operations] Update Book',\r\n  props<{update: Update<Book>}>()\r\n)"
+                }
+            ],
+            "src/app/app-routing.module.ts": [
+                {
+                    "name": "AppRoutingModule",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/app-routing.module.ts",
+                    "type": "",
+                    "defaultValue": "RouterModule.forRoot(routes)"
+                },
+                {
+                    "name": "booksModule",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/app-routing.module.ts",
+                    "type": "",
+                    "defaultValue": "() => import('./books/books.module').then(x => x.BooksModule)"
+                },
+                {
+                    "name": "loginModule",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/app-routing.module.ts",
+                    "type": "",
+                    "defaultValue": "() => import('./login/login.module').then(x => x.LoginModule)"
+                },
+                {
+                    "name": "registerModule",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/app-routing.module.ts",
+                    "type": "",
+                    "defaultValue": "() => import('./register/register.module').then(x => x.RegisterModule)"
+                }
+            ],
+            "src/app/login/store/selectors/login-selector.ts": [
+                {
+                    "name": "authSelector",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/login/store/selectors/login-selector.ts",
+                    "type": "",
+                    "defaultValue": "createSelector(getAuthReferenceState, state => state)"
+                },
+                {
+                    "name": "getAuthReferenceState",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/login/store/selectors/login-selector.ts",
+                    "type": "",
+                    "defaultValue": "createFeatureSelector<AuthState>('user')"
+                }
+            ],
+            "src/app/books/store/selectors/books.selector.ts": [
+                {
+                    "name": "booksFeatureSelector",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/books/store/selectors/books.selector.ts",
+                    "type": "",
+                    "defaultValue": "createFeatureSelector<BookState>('books')"
+                },
+                {
+                    "name": "getAllBooksList",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/books/store/selectors/books.selector.ts",
+                    "type": "",
+                    "defaultValue": "createSelector(\r\n  booksFeatureSelector,\r\n  selectAll\r\n)"
+                },
+                {
+                    "name": "getBookDetails",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/books/store/selectors/books.selector.ts",
+                    "type": "",
+                    "defaultValue": "createSelector(\r\n  booksFeatureSelector,\r\n  selectAll\r\n)"
+                },
+                {
+                    "name": "getCurrentBookId",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/books/store/selectors/books.selector.ts",
+                    "type": "",
+                    "defaultValue": "createSelector(\r\n    booksFeatureSelector,\r\n    (state: BookState) => state.selectedBookId\r\n)"
+                }
+            ],
+            "src/stories/books.stories.ts": [
+                {
+                    "name": "booksList",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/books.stories.ts",
+                    "type": "[]",
+                    "defaultValue": "[\r\n    {\r\n        id: 1,\r\n        title: 'StoryBook',\r\n        author: 'James',\r\n        description: 'Test Book',\r\n        published: '2007'\r\n    },\r\n    {\r\n        id: 2,\r\n        title: 'StoryBook Test',\r\n        author: 'Ravi',\r\n        description: 'Test Book',\r\n        published: '2019'\r\n    }\r\n]"
+                },
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/books.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/books.stories.ts",
+                    "type": "Story<BooksComponent>",
+                    "defaultValue": "(args: BooksComponent) => ({\r\n    component: BooksComponent,\r\n    templateUrl: '../app/books/books.component.html',\r\n    styleUrls: ['../app/books/books.component.scss'],\r\n    moduleMetadata: {\r\n        declarations: [BooksComponent, AddEditBookComponent],\r\n        imports: [\r\n          CommonModule,\r\n          HttpClientModule,\r\n          FormsModule,\r\n          ReactiveFormsModule,\r\n          RouterTestingModule\r\n        ],\r\n        providers: [BooksService],\r\n        schemas: [CUSTOM_ELEMENTS_SCHEMA]\r\n    },\r\n    props: { args, books$: booksList },\r\n})"
+                }
+            ],
+            "src/stories/app.stories.ts": [
+                {
+                    "name": "booksModule",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/app.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => import('../app/books/books.module').then(x => x.BooksModule)"
+                },
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/app.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "loginModule",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/app.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => import('../app/login/login.module').then(x => x.LoginModule)"
+                },
+                {
+                    "name": "registerModule",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/app.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => import('../app/register/register.module').then(x => x.RegisterModule)"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/app.stories.ts",
+                    "type": "Story<AppComponent>",
+                    "defaultValue": "(args: AppComponent) => ({\r\n    component: AppComponent,\r\n    templateUrl: '../app/app.component.html',\r\n    styleUrls: ['../app/app.component.scss'],\r\n    moduleMetadata: {\r\n        declarations: [\r\n            AppComponent,\r\n            HeaderComponent\r\n        ],\r\n        imports: [\r\n            CommonModule,\r\n            BrowserModule,\r\n            AppRoutingModule,\r\n            FormsModule,\r\n            ReactiveFormsModule,\r\n            HttpClientModule,\r\n            RouterModule.forRoot([], { useHash: true }),\r\n            StoreModule.forRoot({user: userReducer, register: registerReducer}),\r\n            EffectsModule.forRoot([UserEffects, RegisterEffects]),\r\n            BrowserAnimationsModule\r\n        ],\r\n        providers: [\r\n            { provide: APP_BASE_HREF, useValue: '/' },\r\n            ThemeService\r\n        ],\r\n        schemas: [CUSTOM_ELEMENTS_SCHEMA],\r\n    },\r\n    props: { args },\r\n})"
+                }
+            ],
+            "src/test-config.helper.ts": [
+                {
+                    "name": "configureTests",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/test-config.helper.ts",
+                    "type": "",
+                    "defaultValue": "(\n  configure: ConfigureFn,\n  compilerOptions: CompilerOptions = {}\n) => {\n  const compilerConfig: CompilerOptions = {\n    preserveWhitespaces: false,\n    ...compilerOptions,\n  };\n\n  const configuredTestBed = TestBed.configureCompiler(compilerConfig);\n\n  configure(configuredTestBed);\n\n  return configuredTestBed.compileComponents().then(() => configuredTestBed);\n}"
+                }
+            ],
+            "src/app/core/services/theme.service.ts": [
+                {
+                    "name": "darkTheme",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/core/services/theme.service.ts",
+                    "type": "object",
+                    "defaultValue": "{\r\n  'primary-color': '#484848',\r\n  'background-color': '#B0B0B0',\r\n  'text-color': 'white'\r\n}"
+                },
+                {
+                    "name": "lightTheme",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/core/services/theme.service.ts",
+                    "type": "object",
+                    "defaultValue": "{\r\n  'primary-color': '#E74C3C',\r\n  'background-color': 'white',\r\n  'text-color': 'white'\r\n}"
+                }
+            ],
+            "src/stories/header.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/header.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/header.stories.ts",
+                    "type": "Story<HeaderComponent>",
+                    "defaultValue": "(args: HeaderComponent) => ({\n  component: HeaderComponent,\n  props: args\n})"
+                }
+            ],
+            "src/environments/environment.prod.ts": [
+                {
+                    "name": "environment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/environments/environment.prod.ts",
+                    "type": "object",
+                    "defaultValue": "{\n  production: true\n}"
+                }
+            ],
+            "src/environments/environment.ts": [
+                {
+                    "name": "environment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/environments/environment.ts",
+                    "type": "object",
+                    "defaultValue": "{\n  production: false,\n  apiUrl: 'http://localhost:3000',\n  booksUrl: 'http://localhost:3000/booksList',\n  loginUrl: 'http://localhost:3000/login',\n  registerUrl: 'http://localhost:3000/register'\n}"
+                }
+            ],
+            "src/app/register/store/selectors/register-selector.ts": [
+                {
+                    "name": "getRegisterReferenceState",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/register/store/selectors/register-selector.ts",
+                    "type": "",
+                    "defaultValue": "createFeatureSelector<RegisterState>('register')"
+                },
+                {
+                    "name": "registerSelector",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/register/store/selectors/register-selector.ts",
+                    "type": "",
+                    "defaultValue": "createSelector(getRegisterReferenceState, state => state)"
+                }
+            ],
+            "src/app/register/store/reducers/register-reducer.ts": [
+                {
+                    "name": "initialState",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/register/store/reducers/register-reducer.ts",
+                    "type": "RegisterState",
+                    "defaultValue": "{\r\n  isRegistered: false,\r\n  user: null,\r\n  token : null,\r\n  message : null\r\n}"
+                },
+                {
+                    "name": "registerReducer",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/register/store/reducers/register-reducer.ts",
+                    "type": "",
+                    "defaultValue": "createReducer(\r\n    initialState,\r\n    // Register reducer\r\n    on(RegisterActions.register, (state, action) => {\r\n            return {\r\n            ...state,\r\n            isRegistered : false,\r\n            user : action.user,\r\n            token : null,\r\n            message : null\r\n        };\r\n    }),\r\n\r\n    // RegisterSuccess reducer\r\n    on(RegisterActions.registerSuccess, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isRegistered : true,\r\n            user : null,\r\n            token : action.accessToken.accessToken,\r\n            message : null,\r\n        };\r\n    }),\r\n\r\n    // RegisterFailuer reducer\r\n    on(RegisterActions.registerFailure, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isRegistered : false,\r\n            user : null,\r\n            token : null,\r\n            message : action.error,\r\n        };\r\n    })\r\n)"
+                }
+            ],
+            "src/app/login/store/reducers/login-reducer.ts": [
+                {
+                    "name": "initialState",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/login/store/reducers/login-reducer.ts",
+                    "type": "AuthState",
+                    "defaultValue": "{\r\n  isAuthenticated : false,\r\n  loginToken : null,\r\n  message : null,\r\n}"
+                },
+                {
+                    "name": "userReducer",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/login/store/reducers/login-reducer.ts",
+                    "type": "",
+                    "defaultValue": "createReducer(\r\n    initialState,\r\n    // Login Reducer\r\n    on(LoginActions.login, (state, action) => {\r\n            return {\r\n            ...state,\r\n            isAuthenticated : false,\r\n            loginToken : null,\r\n            message: null\r\n        };\r\n    }),\r\n\r\n    // LoginSuccess Reducer\r\n    on(LoginActions.loginSuccess, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isAuthenticated : true,\r\n            loginToken : action.accessToken.accessToken,\r\n            message : null\r\n        };\r\n    }),\r\n\r\n    // LoginFailure reducer\r\n    on(LoginActions.loginFailure, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isAuthenticated : false,\r\n            loginToken : null,\r\n            message : action.error,\r\n        };\r\n    }),\r\n\r\n)"
+                }
+            ],
+            "src/stories/login.stories.ts": [
+                {
+                    "name": "login",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/login.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "LoginError",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/login.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/login.stories.ts",
+                    "type": "Story<LoginUserComponent>",
+                    "defaultValue": "(args: LoginUserComponent) => ({\r\n  component: LoginUserComponent,\r\n  props: args\r\n})"
+                }
+            ],
+            "src/app/login/store/actions/login-actions.ts": [
+                {
+                    "name": "login",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/login/store/actions/login-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction('[Auth] Login', props<{ user: User }>())"
+                },
+                {
+                    "name": "loginFailure",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/login/store/actions/login-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction('[Auth] Login Failure', props<{error}>())"
+                },
+                {
+                    "name": "loginSuccess",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/login/store/actions/login-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction('[Auth] Login Success', props<{accessToken}>())"
+                }
+            ],
+            "src/setup-jest.ts": [
+                {
+                    "name": "mock",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/setup-jest.ts",
+                    "type": "",
+                    "defaultValue": "() => {\n  let storage: { [key: string]: string } = {};\n  return {\n    getItem: (key: string) => (key in storage ? storage[key] : null),\n    setItem: (key: string, value: string) => (storage[key] = value || ''),\n    removeItem: (key: string) => delete storage[key],\n    clear: () => (storage = {})\n  };\n}"
+                }
+            ],
+            "src/stories/register.stories.ts": [
+                {
+                    "name": "register",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/register.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "RegisterError",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/register.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/register.stories.ts",
+                    "type": "Story<RegisterUserComponent>",
+                    "defaultValue": "(args: RegisterUserComponent) => ({\r\n  component: RegisterUserComponent,\r\n  props: args\r\n})"
+                }
+            ],
+            "src/app/register/store/actions/register-actions.ts": [
+                {
+                    "name": "register",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/register/store/actions/register-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction('[Auth] Register', props<{ user: RegisterUser }>())"
+                },
+                {
+                    "name": "registerFailure",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/register/store/actions/register-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction('[Auth] Register Failure', props<{error}>())"
+                },
+                {
+                    "name": "registerSuccess",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/register/store/actions/register-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction('[Auth] Register Success', props<{accessToken}>())"
+                }
+            ]
+        },
+        "groupedFunctions": {},
+        "groupedEnumerations": {},
+        "groupedTypeAliases": {
+            "src/test-config.helper.ts": [
+                {
+                    "name": "CompilerOptions",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "Partial<literal type>",
+                    "file": "src/test-config.helper.ts",
+                    "description": "",
+                    "kind": 161
+                },
+                {
+                    "name": "ConfigureFn",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "function",
+                    "file": "src/test-config.helper.ts",
+                    "description": "",
+                    "kind": 162
+                }
+            ]
+        }
+    },
+    "routes": [],
+    "coverage": {
+        "count": 0,
+        "status": "low",
+        "files": [
+            {
+                "filePath": "e2e/src/app.po.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "AppPage",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app-routing.module.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "AppRoutingModule",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app-routing.module.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "booksModule",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app-routing.module.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "loginModule",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app-routing.module.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "registerModule",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "AppComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/books/add-edit-book/add-edit-book.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "AddEditBookComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/9",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/books/books.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "BooksComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/6",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/books/store/actions/books-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "addBook",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/books/store/actions/books-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "bookActionTypes",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/books/store/actions/books-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "bookLoaded",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/books/store/actions/books-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "booksLoaded",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/books/store/actions/books-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "deleteBook",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/books/store/actions/books-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "loadBook",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/books/store/actions/books-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "loadBooks",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/books/store/actions/books-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "updateBook",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/books/store/effects/books-effects.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "BookEffects",
+                "coveragePercent": 0,
+                "coverageCount": "0/7",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/books/store/reducers/books-reducer.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "BookState",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/books/store/reducers/books-reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "adapter",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/books/store/reducers/books-reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "bookReducer",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/books/store/reducers/books-reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "initialState",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/books/store/reducers/books-reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/books/store/selectors/books.selector.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "booksFeatureSelector",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/books/store/selectors/books.selector.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "getAllBooksList",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/books/store/selectors/books.selector.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "getBookDetails",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/books/store/selectors/books.selector.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "getCurrentBookId",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/core/services/authguard.service.ts",
+                "type": "guard",
+                "linktype": "guard",
+                "name": "AuthGuardService",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/core/services/books.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "BooksService",
+                "coveragePercent": 0,
+                "coverageCount": "0/7",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/core/services/login.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "LoginService",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/core/services/register.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "RegisterService",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/core/services/theme.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "ThemeService",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/core/services/theme.service.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "darkTheme",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/core/services/theme.service.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "lightTheme",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/header/header.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "HeaderComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/7",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/login/components/login-user/login-user.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "LoginUserComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/9",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/login/store/actions/login-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "login",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/login/store/actions/login-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "loginFailure",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/login/store/actions/login-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "loginSuccess",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/login/store/effects/login-effects.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "UserEffects",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/login/store/reducers/login-reducer.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "AuthState",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/login/store/reducers/login-reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "initialState",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/login/store/reducers/login-reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "userReducer",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/login/store/selectors/login-selector.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "authSelector",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/login/store/selectors/login-selector.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "getAuthReferenceState",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/models/book.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "Book",
+                "coveragePercent": 0,
+                "coverageCount": "0/6",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/models/login-user.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "User",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/models/register-user.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "RegisterUser",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/register/components/register-user/register-user.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "RegisterUserComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/10",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/register/store/actions/register-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "register",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/register/store/actions/register-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "registerFailure",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/register/store/actions/register-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "registerSuccess",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/register/store/effects/register-effects.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "RegisterEffects",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/register/store/reducers/register-reducer.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "RegisterState",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/register/store/reducers/register-reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "initialState",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/register/store/reducers/register-reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "registerReducer",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/register/store/selectors/register-selector.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "getRegisterReferenceState",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/register/store/selectors/register-selector.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "registerSelector",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/environments/environment.prod.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "environment",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/environments/environment.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "environment",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/setup-jest.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "mock",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/addeditbook.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "add",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/addeditbook.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "bookList",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/addeditbook.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "edit",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/addeditbook.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/app.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "booksModule",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/app.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Default",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/app.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "loginModule",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/app.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "registerModule",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/app.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/books.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "booksList",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/books.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Default",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/books.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/header.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Default",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/header.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/login.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "login",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/login.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "LoginError",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/login.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/register.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "register",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/register.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "RegisterError",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/register.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/test-config.helper.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "configureTests",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            }
+        ]
+    }
+}

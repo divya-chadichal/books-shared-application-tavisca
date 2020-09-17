@@ -110,6 +110,95 @@ input:checked + .slider:before {
   margin-left: 1%;
 }
 
+
+@media (min-width: 1025px) and (max-width: 1366px) {
+  .headerPane {
+    width: 97%;
+    height: 50px;
+    font-size: large;
+  }
+
+  .appName {
+      font-size: 28px;
+      margin-left: 10px;
+      font-weight: bold;
+  }
+
+  .headerName {
+      width: 50%; 
+      float: left;
+  }
+
+  .headerButton {
+      margin-top: 10px;
+      float: right;
+      width: 50%;
+  }
+
+  .appButton {
+      font-size: large;
+      width: 75px;
+      height: 25px;
+  }
+
+  .logInButton {
+    margin-left: 60%;
+  }
+  
+  .logOutButton {
+    margin-left: 70%;
+  }
+  
+  .regThemeButton {
+    margin-left: 1%;
+  }
+
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .headerPane {
+    width: 98%;
+    height: 50px;
+    font-size: large;
+  }
+
+  .appName {
+      font-size: 28px;
+      margin-left: 10px;
+      font-weight: bold;
+  }
+
+  .headerName {
+      width: 50%; 
+      float: left;
+  }
+
+  .headerButton {
+      margin-top: 10px;
+      float: right;
+      width: 50%;
+  }
+
+  .appButton {
+      font-size: large;
+      width: 75px;
+      height: 25px;
+  }
+
+  .logInButton {
+    margin-left: 40%;
+  }
+  
+  .logOutButton {
+    margin-left: 60%;
+  }
+  
+  .regThemeButton {
+    margin-left: 1%;
+  }
+
+}
+
 @media (min-width: 481px) and (max-width: 768px) {
   .headerPane {
     width: 98%;
@@ -256,5 +345,56 @@ input:checked + .slider:before {
     bottom: 3px;
   }
 
+}
+
+@media (min-width: 300px) and (max-width: 320px) {
+  .headerPane {
+    width: 98%;
+    height: 50px;
+    font-size: small;
+  }
+
+  .appName {
+      font-size: 18px;
+      margin-left: 10px;
+      font-weight: bold;
+  }
+
+  .headerName {
+      width: 50%; 
+      float: left;
+  }
+
+  .headerButton {
+      margin-top: 10px;
+      float: right;
+      width: 50%;
+  }
+
+  .appButton {
+      font-size: small;
+      width: 60px;
+      height: 25px;
+  }
+
+  .logInButton {
+    margin-left: 0%;
+  }
+  
+  .logOutButton {
+    margin-left: 1%;
+  }
+  
+  .regThemeButton {
+    margin-left: 1%;
+  }
+
+  .slider.round {
+    margin-top: 0px;
+  }
+
+  .slider {
+    bottom: 3px;
+  }
 }
   

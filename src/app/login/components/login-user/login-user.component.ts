@@ -39,8 +39,10 @@ export class LoginUserComponent implements OnInit {
     if (this.form.valid) {
       this.store.dispatch(login({ user: payload})); // Dispatch Login Action
       this.store.select(authSelector).subscribe(res =>  {
-        this.loginResponse = res; // LoginSuccess or LoginFailure Response
-        this.navigate(res); // call navigate
+        if (res) {
+          this.loginResponse = res; // LoginSuccess or LoginFailure Response
+          this.navigate(res); // call navigate
+        }
       });
     }
   }

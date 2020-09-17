@@ -18,7 +18,11 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     // Set isLoggedIn depending if user is authenticated
-    this.store.select(authSelector).subscribe(state => this.isLoggedIn = state.isAuthenticated);
+    this.store.select(authSelector).subscribe(state => {
+      if (state) {
+        this.isLoggedIn = state.isAuthenticated;
+      }
+    });
   }
 
   // Toggle theme dark/light
