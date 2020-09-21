@@ -61,7 +61,7 @@ export class RegisterUserComponent implements OnInit {
 
   // Navigate to login page function
   navigate(): void {
-    this.router.navigate(['']); // redirect to login page
+    window.location.href = '/login'; // redirect to login page
   }
 }
 
